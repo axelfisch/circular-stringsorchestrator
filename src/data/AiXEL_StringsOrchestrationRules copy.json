@@ -1,0 +1,80 @@
+{
+  "ensemble": [
+    "Violin1",
+    "Violin2",
+    "Viola1",
+    "Viola2",
+    "Cello",
+    "Contrabass"
+  ],
+  "rules": {
+    "melody_voice": "Violin1",
+    "countermelody": "Cello",
+    "harmony_layers": [
+      "Violin2",
+      "Viola1",
+      "Viola2"
+    ],
+    "bass": "Contrabass",
+    "voicing_distance": {
+      "min_interval": "3rd",
+      "max_interval": "10th"
+    },
+    "texture_density": "medium",
+    "dynamic_rules": [
+      "collective cresc./decresc.",
+      "rubato allowed",
+      "syncopes light"
+    ],
+    "voicing_rules": [
+      "Upper voices carry tensions 9/#11/13",
+      "Avoid overlapping between Alto2 and Cello registers",
+      "Keep melody above all harmonics in spectral clarity"
+    ]
+  },
+  "approach_tension_resolution": {
+    "description": "Schéma harmonique central du style Axel Fisch, fluide et modal.",
+    "structure": [
+      "Approche",
+      "Tension",
+      "Résolution"
+    ],
+    "examples": [
+      [
+        "Dmin7",
+        "G7",
+        "Cmaj7"
+      ],
+      [
+        "Dmin7(b5)",
+        "Abmaj7(11+)/G",
+        "Cmin(7+)"
+      ]
+    ]
+  },
+  "substitutions": {
+    "modal": [
+      "bVImaj7",
+      "bIImaj7(#11)",
+      "iv min",
+      "bII7 Lydian-Dom"
+    ],
+    "non_modal": [
+      "triton_sub (V -> bII7)",
+      "secondary_dom (V/V)",
+      "passing_dim (o7)"
+    ],
+    "example_progressions": [
+      [
+        "Fmin7",
+        "Bb7",
+        "Ebmaj7(11+)"
+      ],
+      [
+        "Amin7",
+        "D7(b9)",
+        "Gmaj9(11+)"
+      ]
+    ]
+  }
+}

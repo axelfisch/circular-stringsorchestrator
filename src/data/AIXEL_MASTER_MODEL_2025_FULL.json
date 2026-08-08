@@ -1,0 +1,3951 @@
+{
+  "meta": {
+    "project": "AiXEL Master Model 2025",
+    "author": "Axel Fisch",
+    "compiled_by": "GPT-5 (AIxel)",
+    "description": "Fusion complète de tous les fichiers de règles, profils, dictionnaires et structures harmoniques AiXEL.",
+    "version": "2025.11",
+    "file_count": 8
+  },
+  "datasets": {
+    "AiXel_JazzOrchestrator_2024_Database": {
+      "Project": "AiXel Jazz-Orchestrator",
+      "Version": "2024",
+      "Author": "Axel Fisch",
+      "Resources": {
+        "Core_Concepts": {
+          "Improvisation_Approach": {
+            "Intuitive": "Use the first mode scale transposed to match the chord root",
+            "Theoretical": "Use specific scales or modes (e.g. Lydian for maj7#11) to match chord extensions"
+          },
+          "Composition_Method": {
+            "Form": [
+              "Approach",
+              "Tension",
+              "Resolution"
+            ],
+            "Example": {
+              "Standard": [
+                "Dmin7",
+                "G7",
+                "Cmaj7"
+              ],
+              "Substitution": [
+                "Dmin7(b5)",
+                "Abmaj7(11+)/G",
+                "Cmin(7+)"
+              ]
+            }
+          }
+        },
+        "Scales_and_Chords": {
+          "C_Major_Scale": [
+            "Cmaj7",
+            "Dmin13",
+            "Esus(b9)",
+            "Fmaj7(11+)",
+            "G11",
+            "Amin9(5+)",
+            "Bmin7(b5)"
+          ],
+          "C_Melodic_Minor_Scale": [
+            "Cmin(7+)",
+            "Dsus13(b9)",
+            "Ebmaj7(5+)",
+            "F7(b5)",
+            "G11(5+)",
+            "Amin9(b5)",
+            "B7(ALT)"
+          ],
+          "C_Harmonic_Minor_Scale": [
+            "Cmin(7+)",
+            "Dmin7(b5)",
+            "Ebmaj7(5+)",
+            "Fmin9(b5)",
+            "G7(5+b9)",
+            "Abmaj7(9+11+)",
+            "Bdim"
+          ],
+          "C_Diminished_Scale": [
+            "Cdim7",
+            "D13(b9)",
+            "Ebdim7",
+            "F13(b9)",
+            "Gbdim7",
+            "Ab13(b9)",
+            "Adim7",
+            "B13(b9)"
+          ],
+          "C_Whole_Tone_Scale": [
+            "C9(5+)",
+            "D9(5+)",
+            "E9(5+)",
+            "F#9(5+)",
+            "G#9(5+)",
+            "A#9(5+)"
+          ]
+        },
+        "Chord_Resolution_Strategies": {
+          "Substitutions_for_Tension": {
+            "G7 -> Abmaj7(11+)/G": "Results in Gsus(b9)",
+            "G7 -> Db7/G": "Results in G7(b5b9)"
+          }
+        },
+        "Reference_Documents": [
+          "PROMPT AiXel-JazzOrchestrator 2024",
+          "Scale-over-chords jazz chords from you-2024",
+          "PROMPT12- SCALE + HARMONY TABLE - AIxel2-2024",
+          "TABLE OF DIFFERENT WAYS TO APPROACH Cmaj-AIxel2-2924"
+        ],
+        "Chord_Dictionary_Status": "24 jazz chords defined across 12 tones with extensions and voicings"
+      }
+    },
+    "aixel_full_profile_v1": {
+      "meta": {
+        "name": "AiXEL_Full_Profile_v1",
+        "author": "Axel Fisch (style extracted)",
+        "prepared_by": "ChatGPT (GPT-5 Thinking)",
+        "date": "2025-09-08",
+        "merge_strategy": "append_only",
+        "notes": "Profil complet: orchestration chambre 6 cordes + piano/flûte (option), harmonisation/voicings/extensions Axel-style."
+      },
+      "role": {
+        "description": "AiXEL–JazzOrchestrator: IA de composition, harmonisation et orchestration jazz-pop de chambre dans le style Axel Fisch.",
+        "mission": [
+          "Générer des pièces chantantes AABA 32 mesures (ou A–A’–B–A) avec rondeur et clarté.",
+          "Fournir grilles, voicings élégants, contrechants expressifs et sorties prêtes (MusicXML/MIDI/texte)."
+        ]
+      },
+      "ensemble": {
+        "voices": [
+          "V1=melody",
+          "V2=harmony/close counter",
+          "Alto1",
+          "Alto2",
+          "Cello=expressive counter",
+          "Bass=active foundations"
+        ],
+        "optional": [
+          "Piano=doublure/voicing",
+          "Flute=doublure légère"
+        ],
+        "arrangement_minimalism": "Détails d’orchestration réduits au nécessaire; focus sur l’harmonisation."
+      },
+      "objectives": [
+        "Approche→Tension→Résolution à l’échelle de la mesure et des 4–8 mesures.",
+        "Priorité aux tensions 9/#11/13, dominantes Lydian-Dominant, interchange modal doux.",
+        "Sorties lisibles (Real-Book) et jouables, avec nuances et repères de sections."
+      ],
+      "meters_groove_form": {
+        "meters": [
+          "3/4 (jazz waltz)",
+          "6/8",
+          "4/4 rubato/binaire pop-jazz"
+        ],
+        "form": "A-A-B-A (32 mesures) + intro vamp courte, coda douce optionnelle.",
+        "harmonic_rhythm": "1–2 accords/mesure; tension en fin de mesure → résolution au début de la suivante; charnières (m8/16/24/32) = V7(9,13) doux, V7(#11,13) ou backdoor."
+      },
+      "harmonic_language": {
+        "tensions_preferred": [
+          "9",
+          "#11",
+          "13"
+        ],
+        "alterations_policy": "b9/#9/b13 = ponctuelles et résolues rapidement (effet expressif).",
+        "chords_whitelist": [
+          "Maj7(9)",
+          "Maj9(#11)",
+          "Maj13(#11)",
+          "Maj7(add9)/5",
+          "m7(9/11)",
+          "m6/9",
+          "m(maj7,9)",
+          "7(9,13)",
+          "7(9,13,#11)",
+          "13(b9-soft)",
+          "m7b5(11)",
+          "o7(passing)",
+          "sus2",
+          "sus4",
+          "sus4(9,13)",
+          "add9",
+          "slash-chords (I/V, Maj9/5, C/E, Bbmaj9/F)",
+          "quartal(quintal)-moderate"
+        ],
+        "practices": [
+          "Interchange modal: bVImaj7, bIImaj7(#11), iv emprunté",
+          "Dominantes secondaires et triton-sub (V→bII) traitées Lydian-Dominant",
+          "o7 de passage pour couture chromatique",
+          "Planing doux sur pédales I ou V"
+        ],
+        "avoid_rules": [
+          "Pas d’11 naturel sur Imaj si #11 est en jeu.",
+          "Éviter stations prolongées sur o7.",
+          "Limiter l’agressivité des altérations; toujours résoudre vite."
+        ]
+      },
+      "scale_mapping": {
+        "Maj7(9,#11)": "Lydian",
+        "Maj9": "Ionian",
+        "7(9,13,#11)": "LydianDominant",
+        "7(13,b9-soft)": "Mixolydian b9 13 (HM5)",
+        "m7(9/11)": "Dorian",
+        "m(maj7,9)": "Melodic Minor I",
+        "m7b5(11)": "Locrian #2",
+        "7sus(9,13)": "Mixolydian (résolution 4→3)"
+      },
+      "substitutions_interchange": [
+        "V7 → bII7 (tritone-sub) en Lydian-Dominant",
+        "Backdoor: bVII7 → Imaj ; IVm → Imaj",
+        "bVImaj7 & bIImaj7(#11) par interchange",
+        "Chaînes ii–V modulantes par tonalités voisines",
+        "Pedal point I ou V sous planings de tétrades"
+      ],
+      "progression_recipes": [
+        [
+          "Imaj9",
+          "V/II7(#11)",
+          "II-9",
+          "V7(9,13)",
+          "Imaj9"
+        ],
+        [
+          "ii-9",
+          "V7(#11,13)",
+          "Imaj9(#11)",
+          "IVmaj9",
+          "iv6",
+          "Imaj9"
+        ],
+        [
+          "i m9",
+          "iv m9",
+          "bVImaj9",
+          "bII7 (sub)",
+          "Imaj9 (relative)"
+        ],
+        [
+          "iiø(11)",
+          "V7(13,b9-soft)",
+          "i m9"
+        ],
+        [
+          "Imaj9",
+          "bVImaj9",
+          "bIImaj7(#11)",
+          "Imaj9"
+        ]
+      ],
+      "voicing_blueprints": {
+        "Imaj#11": [
+          "7",
+          "3",
+          "9",
+          "#11",
+          "13?"
+        ],
+        "V7 LydianDom": [
+          "3",
+          "b7",
+          "9",
+          "#11",
+          "13"
+        ],
+        "m9 Dorian": [
+          "b3",
+          "b7",
+          "9",
+          "11",
+          "13"
+        ],
+        "m7b5 add11": [
+          "b3",
+          "b5",
+          "b7",
+          "9",
+          "11"
+        ]
+      },
+      "voice_leading_rules": [
+        "Centre des voicings = 3e & 7e ; extensions en couronne (9/#11/13).",
+        "Résolutions internes par demi-tons vers 3e/7e.",
+        "Mouvements contraires > parallèles 5/8.",
+        "Notes-cibles au début de mesure ; appoggiatures/tensions en levée/fin."
+      ],
+      "bass_cello_guidelines": {
+        "bass": "Lignes actives root–3–5–7 ou root–5–9, approches chromatiques, anacrouses discrètes.",
+        "cello": "Contre-chant chantant (réponse/écho de V1), éviter parallèles 5/8 avec la basse."
+      },
+      "melody_phrasing": {
+        "intervals": "2des/3ces dominantes; 4tes pour l’élan; 6tes chaleureuses.",
+        "phrasing": "Phrases de 4/8 mesures; anacrouses fréquentes; retards résolus sur contre-temps.",
+        "ornaments": "Voisines chromatiques, appoggiatures brèves, notes tenues sur extensions."
+      },
+      "dynamics_interpretation": [
+        "Cresc./dim. collectifs, respirations entre phrases, rubato local en transitions.",
+        "Toujours viser la rondeur; éviter l’acidité prolongée."
+      ],
+      "notation_prefs": [
+        "Maj7(9,#11), 7(9,13,#11), m9(11), m7b5(11), sus4(9,13), add9",
+        "Slash explicites: Cmaj9/E, Bbmaj9/F",
+        "Max 4 accords/ligne (style Real-Book)"
+      ],
+      "procedure_generate": [
+        "Fixer centre tonal + ambiance (waltz/pop/rubato); analyser/écrire phrase-graine.",
+        "Tracer AABA 32 m. avec interchange (bVImaj7, bIImaj7#11), V7 Lydian-Dom, ii–V doux, °7 de passage.",
+        "Voicer d’abord au Piano (3–7–9–#11), puis projeter vers Cordes (drop-2/2&4) en contrôlant doublures & registres.",
+        "Écrire le contre-chant Cello (réponses/imitations/notes-cibles).",
+        "Composer la Basse (lignes actives, chromas vers débuts de sections).",
+        "Ornements (anacrouses/appoggiatures), cresc./dim., altérations dures brèves et expressives.",
+        "Vérifier la conduite (parallélismes/collisions, pas d’11 naturel si #11 en jeu).",
+        "Exporter MusicXML/MIDI (ou texte) + repères de sections/nuances."
+      ],
+      "output_spec": {
+        "formats": [
+          "MusicXML",
+          "MIDI",
+          "ABC",
+          "Texte Real-Book"
+        ],
+        "headers": [
+          "tempo",
+          "time_signature",
+          "key"
+        ],
+        "sections": [
+          "A1",
+          "A2",
+          "B",
+          "A3"
+        ],
+        "parts": [
+          "V1",
+          "V2",
+          "Alto1",
+          "Alto2",
+          "Cello",
+          "Bass",
+          "Piano?",
+          "Flute?"
+        ],
+        "dynamics": [
+          "p",
+          "mp",
+          "mf",
+          "cresc.",
+          "dim.",
+          "legato",
+          "stacc.",
+          "rubato"
+        ],
+        "comment_if_requested": "2 lignes max expliquant choix harmoniques/voicings"
+      },
+      "checklist": [
+        "AABA 32 m. (repères A1/A2/B/A3)",
+        "Chiffrages lisibles + parties nommées",
+        "Voicings 3–7–9/#11 (conduite propre)",
+        "Basse active, Cello expressif",
+        "Nuances (cresc./dim./rubato)",
+        "Export propre (MusicXML/MIDI/Texte)"
+      ],
+      "example_prompts": [
+        "Crée AABA en Eb, 3/4 jazz waltz, V7 Lydian-Dom et °7 de passage, basse root–3–5–7, tensions 9/#11/13.",
+        "Orchestration rubato 6 cordes + piano, modulations voisines par interchange, mélodie V1 doublée Flûte au B."
+      ],
+      "style_profile_recap": [
+        "Couleurs: maj7(9/#11/13), sus2/4, min9, V7(#11,13), slash-chords",
+        "Templates: vamp Bb|Bbdim|Bb|Fm7 ; ii–V doux Gm7–C7→Fm7–Bb7→Ebm7–Ab7→Bb ; pont lydien GbMaj7–G°–DbMaj7/Ab ; cadence mineure Bb-m7→Eb9→Eb-m9→Ab13",
+        "Habitudes: intro vamp, AABA 32, coda douce répétée, D.C. al Coda possible"
+      ],
+      "example_snippets": {
+        "susan_intro_vamp": "Bb | Bbdim | Bb | Fm7 | Bb | Fm7 | Ab7(#11) | Bb",
+        "all_she_brings_hook": "F#7(#9) | Asus4 | G | G- | D | C | E-7b5 F#7 | D"
+      }
+    },
+    "aixel_harmony_addon_v1": {
+      "module_name": "AiXEL–JazzOrchestrator Harmony Addon",
+      "merge_strategy": "append_only",
+      "version": "1.0",
+      "date": "2025-09-08",
+      "role_reminder": "Ne remplace rien. Ce module complète les consignes existantes avec le focus Harmonisation & Extensions (style Axel Fisch).",
+      "ensemble_summary": {
+        "keep_minimal": true,
+        "voices": [
+          "V1=melody",
+          "V2=harmony/close counter",
+          "Alto1",
+          "Alto2",
+          "Cello=expressive counter",
+          "Bass=active foundations",
+          "Piano/Flute=optional doubling"
+        ]
+      },
+      "objectives": [
+        "Harmoniser/orchestrer en AABA 32 mesures (ou A–A’–B–A) avec rondeur, clarté, chaleur.",
+        "Appliquer Approche→Tension→Résolution à l’échelle de la mesure et des 4–8 mesures.",
+        "Privilégier les tensions 9, #11, 13 et les dominantes Lydian-Dominant."
+      ],
+      "harmonic_language": {
+        "tensions_preferred": [
+          "9",
+          "#11",
+          "13"
+        ],
+        "alterations_usage": "b9/#9/b13 = ponctuelles, expressives, brièvement tenues puis résolues.",
+        "chords_whitelist": [
+          "Maj7(9)",
+          "Maj9(#11)",
+          "Maj13(#11)",
+          "Maj7(add9)/5",
+          "m7(9/11)",
+          "m6/9",
+          "m(maj7,9)",
+          "7(9,13)",
+          "7(9,13,#11)",
+          "13(b9-soft)",
+          "m7b5(11)",
+          "o7(passing)",
+          "sus2",
+          "sus4",
+          "sus4(9,13)",
+          "add9",
+          "slash-chords (C/E, Bbmaj9/F, I/V, Maj9/5)",
+          "quartal(quintal)-moderate"
+        ],
+        "practices": [
+          "Interchange modal: bVImaj7, bIImaj7(#11), iv emprunté",
+          "Dominantes secondaires et triton-sub (V→bII) en Lydian-Dominant",
+          "o7 de passage entre degrés pour couture chromatique",
+          "Planing doux sur pédales I ou V"
+        ],
+        "avoid_rules": [
+          "Éviter 11 naturel sur Imaj quand #11 est en usage",
+          "Éviter stations prolongées sur o7",
+          "Limiter l’agressivité des altérations: toujours résoudre vite"
+        ]
+      },
+      "scale_mapping": {
+        "Maj7(9,#11)": "Lydian",
+        "Maj9": "Ionian",
+        "7(9,13,#11)": "LydianDominant",
+        "7(13,b9-soft)": "Mixolydian b9 13 (HM5)",
+        "m7(9/11)": "Dorian",
+        "m(maj7,9)": "Melodic Minor I",
+        "m7b5(11)": "Locrian #2",
+        "7sus(9,13)": "Mixolydian (résolution 4→3)"
+      },
+      "substitutions_interchange": [
+        "V7 → bII7 (tritone-sub) traité Lydian-Dominant",
+        "Backdoor: bVII7 → Imaj ; IVm → Imaj",
+        "bVImaj7 & bIImaj7(#11) via interchange modal",
+        "Chaînes ii–V modulantes par tonalités voisines",
+        "Pedal point I ou V sous planings de tétrades"
+      ],
+      "progression_recipes": [
+        [
+          "Imaj9",
+          "V/II7(#11)",
+          "II-9",
+          "V7(9,13)",
+          "Imaj9"
+        ],
+        [
+          "ii-9",
+          "V7(#11,13)",
+          "Imaj9(#11)",
+          "IVmaj9",
+          "iv6",
+          "Imaj9"
+        ],
+        [
+          "i m9",
+          "iv m9",
+          "bVImaj9",
+          "bII7 (sub)",
+          "Imaj9 (relative)"
+        ],
+        [
+          "iiø(11)",
+          "V7(13,b9-soft)",
+          "i m9"
+        ],
+        [
+          "Imaj9",
+          "bVImaj9",
+          "bIImaj7(#11)",
+          "Imaj9"
+        ]
+      ],
+      "voicing_blueprints": {
+        "Imaj#11": [
+          "7",
+          "3",
+          "9",
+          "#11",
+          "13?"
+        ],
+        "V7 LydianDom": [
+          "3",
+          "b7",
+          "9",
+          "#11",
+          "13"
+        ],
+        "m9 Dorian": [
+          "b3",
+          "b7",
+          "9",
+          "11",
+          "13"
+        ],
+        "m7b5 add11": [
+          "b3",
+          "b5",
+          "b7",
+          "9",
+          "11"
+        ]
+      },
+      "harmonic_rhythm_rules": [
+        "1–2 accords par mesure (3/4 ou 4/4)",
+        "Tension en fin de mesure, résolution en début de mesure suivante",
+        "Aux charnières (m8/16/24/32): V7(9,13) doux, V7(#11,13) ou backdoor"
+      ],
+      "voice_leading_rules": [
+        "Cœur des voicings: 3e & 7e ; extensions (9/#11/13) en couronne",
+        "Résolutions internes par demi-tons vers 3e/7e",
+        "Mouvements contraires préférés aux parallèles 5/8",
+        "Placer les notes-cibles au début de mesure ; appoggiatures/tensions en levée/fin"
+      ],
+      "bass_cello_guidelines": {
+        "bass": "Lignes actives root–3–5–7 ou root–5–9, approches chromatiques, anacrouses discrètes",
+        "cello": "Contre-chant chantant (réponse/écho de V1), éviter parallèles 5/8 avec la basse"
+      },
+      "melody_phrasing": {
+        "intervals": "Préférence 2des/3ces, 4tes pour l’élan, 6tes chaleureuses",
+        "phrasing": "Phrases 4/8 mesures, anacrouses fréquentes, retards résolus sur contre-temps",
+        "ornaments": "Voisines chromatiques, appoggiatures courtes, notes tenues sur extensions"
+      },
+      "dynamics_interpretation": [
+        "Cresc./dim. collectifs et respirations entre phrases",
+        "Rubato local dans les transitions",
+        "Toujours viser la rondeur (éviter acidité prolongée)"
+      ],
+      "notation_prefs": [
+        "Maj7(9,#11), 7(9,13,#11), m9(11), m7b5(11), sus4(9,13), add9",
+        "Slash explicites: Cmaj9/E, Bbmaj9/F",
+        "Max 4 accords/ligne en sortie texte (style Real-Book)"
+      ],
+      "procedure_generate": [
+        "Fixer centre tonal + ambiance (waltz/pop/rubato) ; analyser/écrire phrase-graine.",
+        "Tracer AABA 32 m. avec interchange (bVImaj7, bIImaj7#11), V7 Lydian-Dom, ii–V doux, °7 de passage.",
+        "Voicer d’abord au Piano (3–7–9–#11), puis projeter vers Cordes (drop-2/2&4) en contrôlant doublures & registres.",
+        "Écrire le contre-chant Cello (réponses, imitations, notes-cibles).",
+        "Composer la Basse (lignes actives, chromas vers débuts de sections).",
+        "Ornements (anacrouses/appoggiatures), cresc./dim., altérations dures brèves et expressives.",
+        "Vérifier la conduite (éviter parallélismes/collisions, pas de 11 naturel si #11 en jeu).",
+        "Exporter MusicXML/MIDI (ou texte clair) + repères de sections/nuances."
+      ],
+      "output_spec": {
+        "formats": [
+          "MusicXML",
+          "MIDI",
+          "ABC",
+          "Texte Real-Book"
+        ],
+        "headers": [
+          "tempo",
+          "time_signature",
+          "key"
+        ],
+        "sections": [
+          "A1",
+          "A2",
+          "B",
+          "A3"
+        ],
+        "parts": [
+          "V1",
+          "V2",
+          "Alto1",
+          "Alto2",
+          "Cello",
+          "Bass",
+          "Piano?",
+          "Flute?"
+        ],
+        "dynamics": [
+          "p",
+          "mp",
+          "mf",
+          "cresc.",
+          "dim.",
+          "legato",
+          "stacc.",
+          "rubato"
+        ],
+        "comment_if_requested": "2 lignes max expliquant choix harmoniques/voicings"
+      },
+      "checklist": [
+        "AABA 32 mesures avec repères clairs",
+        "Chiffrages lisibles + parties nommées",
+        "Voicings 3–7–9/#11 (conduite propre)",
+        "Basse active, Cello expressif",
+        "Nuances (cresc./dim./rubato)",
+        "Export propre (MusicXML/MIDI/Texte)"
+      ],
+      "example_prompts": [
+        "Crée AABA en Eb, 3/4 jazz waltz, V7 Lydian-Dom et °7 de passage, basse root–3–5–7, tensions 9/#11/13.",
+        "Orchestration rubato 6 cordes + piano, modulations voisines par interchange, mélodie V1 doublée Flûte au B."
+      ],
+      "style_profile_recap": [
+        "Couleurs: maj7(9/#11/13), sus2/4, min9, V7(#11,13), slash-chords",
+        "Templates: vamp Bb|Bbdim|Bb|Fm7 ; ii–V doux Gm7–C7→Fm7–Bb7→Ebm7–Ab7→Bb ; pont lydien GbMaj7–G°–DbMaj7/Ab ; cadence mineure Bb-m7→Eb9→Eb-m9→Ab13",
+        "Habitudes: intro vamp, AABA 32, coda douce répétée, D.C. al Coda possible"
+      ]
+    },
+    "axel_style_profile": {
+      "meta": {
+        "name": "axel_style_profile_v1",
+        "author": "Axel Fisch (extracted + structured)",
+        "prepared_by": "ChatGPT (GPT-5 Thinking)",
+        "date": "2025-09-08",
+        "notes": "Synthèse des partitions fournies (A Song for Susan, All She Brings, AreYouThereNow..., 2023 happier 2 o21, Don't Worry part 2008)."
+      },
+      "style_overview": [
+        "Pop‑jazz et jazz de chambre avec couleurs modales/altérées, valse jazz fréquente, tempos lents/medium.",
+        "Goût marqué pour les dominantes lydiennes (#11), les dominantes altérées et les accords diminués d’approche.",
+        "Vamps et intros cycliques, codas répétitives, DC al Coda; formes simples mais arrangées finement.",
+        "Écriture mélodique cantabile, souvent par degrés conjoints avec appoggiatures/notes voisines.",
+        "Textures typiques: vibraphone solo, Rhodes + basse synthé, guitares/cordes avec slash-chords."
+      ],
+      "harmonic_language": {
+        "core_chords": [
+          "Maj7(add9)",
+          "Min7",
+          "Min9",
+          "Dominant7",
+          "Dominant13",
+          "LydianDominant7(#11)",
+          "Half-diminished (m7b5)",
+          "Diminished°/o7",
+          "Sus4",
+          "Add2/Add9",
+          "Quartal stacks (occasionnel)"
+        ],
+        "usage_traits": [
+          "Modal interchange (bVImaj7, bIImaj7/lydien, emprunts mineur/mode)",
+          "Dominantes secondaires et triton-sub remplaçant V7",
+          "Accords diminués comme passerelles chromatiques",
+          "Slash-chords pour contrôler la basse et la couleur (Maj7/5, I/V, bVI/5)"
+        ]
+      },
+      "progression_templates": [
+        {
+          "name": "Waltz‑Bb vamp (type 'Susan')",
+          "meter": "3/4",
+          "bars": 8,
+          "progression": [
+            "Bb",
+            "Bbdim",
+            "Bb",
+            "Fm7",
+            "Bb",
+            "Fm7",
+            "Ab7(#11)",
+            "—"
+          ],
+          "comment": "Intro cyclique, établit la couleur et le pas de valse."
+        },
+        {
+          "name": "ii–V plans mineurs (Bb centre)",
+          "bars": 8,
+          "progression": [
+            "Gm7",
+            "C7",
+            "Fm7",
+            "Bb7",
+            "Ebm7",
+            "Ab7",
+            "Bb",
+            "—"
+          ],
+          "comment": "Chaînage ii–V avec pivots mineurs et retour tonique."
+        },
+        {
+          "name": "Pont couleur lydienne",
+          "bars": 4,
+          "progression": [
+            "GbMaj7",
+            "G°",
+            "DbMaj7/Ab",
+            "—"
+          ],
+          "comment": "Espace onirique, planage modal vers bVI puis bII relatif."
+        },
+        {
+          "name": "Cadence mineure étendue",
+          "bars": 4,
+          "progression": [
+            "Bbmin7",
+            "Eb9",
+            "Ebmin9",
+            "Ab13"
+          ],
+          "comment": "Tension‑résolution douce, ouvre vers reprise/Coda."
+        },
+        {
+          "name": "Pop‑jazz sus/add (type 'All She Brings')",
+          "bars": 8,
+          "progression": [
+            "F#7(#9)",
+            "Asus4",
+            "G",
+            "G‑",
+            "D",
+            "C",
+            "E‑7b5→F#7",
+            "D"
+          ],
+          "comment": "Mix sus4, add2 et dominante augmentée; feel pop‑jazz."
+        }
+      ],
+      "voicing_rules": {
+        "general": [
+          "Préférer les voix conjointes; éviter les grands sauts simultanés dans plusieurs voix.",
+          "Tenir la 3ce/7e au milieu; extensions (9, 11#, 13) au dessus.",
+          "Utiliser des demi‑tons d’approche vers 3ce/7e au changement d’accord."
+        ],
+        "strings_or_warm_pads": [
+          "Drop‑2/Drop‑2&4 serrés dans le médium.",
+          "Doubler la fondamentale à l’octave basse si la basse n’est pas explicite.",
+          "Sur LydianDom: garder #11 en haut; éviter 11 naturel."
+        ],
+        "rhodes/piano": [
+          "Main gauche: fondamentales/5tes/basses en noires liées (tempo lent).",
+          "Main droite: clusters 3ce‑7e‑9e (+ #11 si lydien).",
+          "Arpèges brisés sur 3/4 (1‑a‑2‑&‑3) pour la valse."
+        ]
+      },
+      "melody_language": {
+        "intervals": "Prédominance de secondes/tierses; 4tes justes comme élan; 6tes pour la chaleur.",
+        "phrasing": "Phrases de 4 ou 8 mesures, anacrouses fréquentes, retards sur temps fort résolus sur contre‑temps.",
+        "ornaments": "Voisines chromatiques, appoggiatures courtes, notes tenues sur extensions."
+      },
+      "rhythm_grooves": [
+        {
+          "name": "Jazz Waltz",
+          "meter": "3/4",
+          "tempo_bpm": 120,
+          "feel": "brosses/ride, marche conjointe de basse."
+        },
+        {
+          "name": "Downtempo Rhodes",
+          "meter": "4/4",
+          "tempo_bpm": 60,
+          "feel": "lo‑fi/chill, basse synthé en legato."
+        }
+      ],
+      "form_habits": [
+        "Intro vamp cyclique",
+        "A–A'–B–A (ou AABA) avec pont modal/lydien",
+        "Coda à répétition libre (repeat until cue)",
+        "D.C. al Coda sur pièces pop‑jazz"
+      ],
+      "reharmonization_strategies": [
+        "Remplacer V7 par lydian‑dominant V7(#11) ou par bIImaj7 (Lydien).",
+        "Insérer °7 entre tout mouvement chromatique montant/descendant.",
+        "Utiliser slash‑chords pour ancrer une basse diatonique sous couleurs empruntées.",
+        "Étendre ii–V par planage minorisant (… → m7  b5 → V7alt)."
+      ],
+      "instrumentation_signatures": [
+        "Solo vibraphone dédié (hommage à Chick).",
+        "Rhodes Piano + Synth Bass (textures calmes, 60 BPM).",
+        "Arrangements vocaux SATB ponctuels (a cappella/pop‑jazz)."
+      ],
+      "example_snippets": {
+        "susan_intro_vamp": {
+          "meter": "3/4",
+          "key_center": "Bb",
+          "bars": [
+            "Bb | Bbdim | Bb | Fm7 | Bb | Fm7 | Ab7(#11) | Bb"
+          ],
+          "voice_leading_hint": "Approches chromatiques vers 3ce/7e à chaque changement."
+        },
+        "all_she_brings_hook": {
+          "bars": [
+            "F#7(#9) | Asus4 | G | G- | D | C | E-7b5 F#7 | D"
+          ],
+          "solo_note": "Improvisation sur dominante augmentée (ton‑demi‑ton autour de 3ce/7e)."
+        }
+      },
+      "generation_rules": [
+        "Toujours produire: (1) grille accords, (2) voicing piano/strings compact, (3) basse (slash si utile), (4) indication de forme (Intro/A/B/Coda).",
+        "Favoriser ‘Approche → Tension → Résolution’ à l’échelle des 4–8 mesures.",
+        "Si waltz: articuler la basse 1‑(2+3) et réserver la mélodie sur contre‑temps."
+      ]
+    },
+    "full_jazz_chords_clean": {
+      "C": {
+        "Cmaj": [
+          "C",
+          "E",
+          "G"
+        ],
+        "Cadd9": [
+          "C",
+          "E",
+          "G",
+          "D"
+        ],
+        "Cmaj7": [
+          "C",
+          "E",
+          "G",
+          "B"
+        ],
+        "Cmaj9(11+)": [
+          "C",
+          "E",
+          "G",
+          "B",
+          "D",
+          "F#"
+        ],
+        "Cmaj7(5+)": [
+          "C",
+          "E",
+          "G#",
+          "B"
+        ],
+        "Cmin": [
+          "C",
+          "Eb",
+          "G"
+        ],
+        "Cmin6": [
+          "C",
+          "Eb",
+          "G",
+          "A"
+        ],
+        "Cmin7": [
+          "C",
+          "Eb",
+          "G",
+          "Bb"
+        ],
+        "Cmin(add9)": [
+          "C",
+          "Eb",
+          "G",
+          "D"
+        ],
+        "Cmin9": [
+          "C",
+          "Eb",
+          "G",
+          "Bb",
+          "D"
+        ],
+        "Cmin11": [
+          "C",
+          "Eb",
+          "G",
+          "Bb",
+          "D",
+          "F"
+        ],
+        "Cmin7(b5)": [
+          "C",
+          "Eb",
+          "Gb",
+          "Bb"
+        ],
+        "Cmin9(b5)": [
+          "C",
+          "Eb",
+          "Gb",
+          "Bb",
+          "D"
+        ],
+        "Cmin(7+)": [
+          "C",
+          "Eb",
+          "G",
+          "B"
+        ],
+        "Cmin9(7+)": [
+          "C",
+          "Eb",
+          "G",
+          "B",
+          "D"
+        ],
+        "C9": [
+          "C",
+          "E",
+          "G",
+          "Bb",
+          "D"
+        ],
+        "C11": [
+          "C",
+          "E",
+          "G",
+          "Bb",
+          "D",
+          "F"
+        ],
+        "C13(b5)": [
+          "C",
+          "E",
+          "Gb",
+          "Bb",
+          "D",
+          "A"
+        ],
+        "C7(9+5+)": [
+          "C",
+          "E",
+          "G#",
+          "Bb",
+          "D"
+        ],
+        "C7(b9)": [
+          "C",
+          "E",
+          "G",
+          "Bb",
+          "Db"
+        ],
+        "C13(b9)": [
+          "C",
+          "E",
+          "G",
+          "Bb",
+          "Db",
+          "A"
+        ],
+        "Cdim": [
+          "C",
+          "Eb",
+          "Gb",
+          "A"
+        ],
+        "Csus13": [
+          "C",
+          "F",
+          "G",
+          "A"
+        ],
+        "C7sus4(b9)": [
+          "C",
+          "F",
+          "G",
+          "Bb",
+          "Db"
+        ]
+      },
+      "Db": {
+        "Cmaj": [
+          "C#",
+          "F",
+          "Ab"
+        ],
+        "Cadd9": [
+          "C#",
+          "F",
+          "Ab",
+          "Eb"
+        ],
+        "Cmaj7": [
+          "C#",
+          "F",
+          "Ab",
+          "C"
+        ],
+        "Cmaj9(11+)": [
+          "C#",
+          "F",
+          "Ab",
+          "C",
+          "Eb",
+          "G"
+        ],
+        "Cmaj7(5+)": [
+          "C#",
+          "F",
+          "G#",
+          "C"
+        ],
+        "Cmin": [
+          "C#",
+          "E",
+          "Ab"
+        ],
+        "Cmin6": [
+          "C#",
+          "E",
+          "Ab",
+          "Bb"
+        ],
+        "Cmin7": [
+          "C#",
+          "E",
+          "Ab",
+          "B"
+        ],
+        "Cmin(add9)": [
+          "C#",
+          "E",
+          "Ab",
+          "Eb"
+        ],
+        "Cmin9": [
+          "C#",
+          "E",
+          "Ab",
+          "B",
+          "Eb"
+        ],
+        "Cmin11": [
+          "C#",
+          "E",
+          "Ab",
+          "B",
+          "Eb",
+          "F#"
+        ],
+        "Cmin7(b5)": [
+          "C#",
+          "E",
+          "Gb",
+          "B"
+        ],
+        "Cmin9(b5)": [
+          "C#",
+          "E",
+          "Gb",
+          "B",
+          "Eb"
+        ],
+        "Cmin(7+)": [
+          "C#",
+          "E",
+          "Ab",
+          "C"
+        ],
+        "Cmin9(7+)": [
+          "C#",
+          "E",
+          "Ab",
+          "C",
+          "Eb"
+        ],
+        "C9": [
+          "C#",
+          "F",
+          "Ab",
+          "B",
+          "Eb"
+        ],
+        "C11": [
+          "C#",
+          "F",
+          "Ab",
+          "B",
+          "Eb",
+          "F#"
+        ],
+        "C13(b5)": [
+          "C#",
+          "F",
+          "Gb",
+          "B",
+          "Eb",
+          "Bb"
+        ],
+        "C7(9+5+)": [
+          "C#",
+          "F",
+          "G#",
+          "B",
+          "Eb"
+        ],
+        "C7(b9)": [
+          "C#",
+          "F",
+          "Ab",
+          "B",
+          "Db"
+        ],
+        "C13(b9)": [
+          "C#",
+          "F",
+          "Ab",
+          "B",
+          "Db",
+          "Bb"
+        ],
+        "Cdim": [
+          "C#",
+          "E",
+          "Gb",
+          "Bb"
+        ],
+        "Csus13": [
+          "C#",
+          "F#",
+          "Ab",
+          "Bb"
+        ],
+        "C7sus4(b9)": [
+          "C#",
+          "F#",
+          "Ab",
+          "B",
+          "Db"
+        ]
+      },
+      "D": {
+        "Cmaj": [
+          "D",
+          "F#",
+          "A"
+        ],
+        "Cadd9": [
+          "D",
+          "F#",
+          "A",
+          "E"
+        ],
+        "Cmaj7": [
+          "D",
+          "F#",
+          "A",
+          "C#"
+        ],
+        "Cmaj9(11+)": [
+          "D",
+          "F#",
+          "A",
+          "C#",
+          "E",
+          "Ab"
+        ],
+        "Cmaj7(5+)": [
+          "D",
+          "F#",
+          "G#",
+          "C#"
+        ],
+        "Cmin": [
+          "D",
+          "F",
+          "A"
+        ],
+        "Cmin6": [
+          "D",
+          "F",
+          "A",
+          "B"
+        ],
+        "Cmin7": [
+          "D",
+          "F",
+          "A",
+          "C"
+        ],
+        "Cmin(add9)": [
+          "D",
+          "F",
+          "A",
+          "E"
+        ],
+        "Cmin9": [
+          "D",
+          "F",
+          "A",
+          "C",
+          "E"
+        ],
+        "Cmin11": [
+          "D",
+          "F",
+          "A",
+          "C",
+          "E",
+          "G"
+        ],
+        "Cmin7(b5)": [
+          "D",
+          "F",
+          "Gb",
+          "C"
+        ],
+        "Cmin9(b5)": [
+          "D",
+          "F",
+          "Gb",
+          "C",
+          "E"
+        ],
+        "Cmin(7+)": [
+          "D",
+          "F",
+          "A",
+          "C#"
+        ],
+        "Cmin9(7+)": [
+          "D",
+          "F",
+          "A",
+          "C#",
+          "E"
+        ],
+        "C9": [
+          "D",
+          "F#",
+          "A",
+          "C",
+          "E"
+        ],
+        "C11": [
+          "D",
+          "F#",
+          "A",
+          "C",
+          "E",
+          "G"
+        ],
+        "C13(b5)": [
+          "D",
+          "F#",
+          "Gb",
+          "C",
+          "E",
+          "B"
+        ],
+        "C7(9+5+)": [
+          "D",
+          "F#",
+          "G#",
+          "C",
+          "E"
+        ],
+        "C7(b9)": [
+          "D",
+          "F#",
+          "A",
+          "C",
+          "Db"
+        ],
+        "C13(b9)": [
+          "D",
+          "F#",
+          "A",
+          "C",
+          "Db",
+          "B"
+        ],
+        "Cdim": [
+          "D",
+          "F",
+          "Gb",
+          "B"
+        ],
+        "Csus13": [
+          "D",
+          "G",
+          "A",
+          "B"
+        ],
+        "C7sus4(b9)": [
+          "D",
+          "G",
+          "A",
+          "C",
+          "Db"
+        ]
+      },
+      "Eb": {
+        "Cmaj": [
+          "Eb",
+          "G",
+          "Bb"
+        ],
+        "Cadd9": [
+          "Eb",
+          "G",
+          "Bb",
+          "F"
+        ],
+        "Cmaj7": [
+          "Eb",
+          "G",
+          "Bb",
+          "D"
+        ],
+        "Cmaj9(11+)": [
+          "Eb",
+          "G",
+          "Bb",
+          "D",
+          "F",
+          "A"
+        ],
+        "Cmaj7(5+)": [
+          "Eb",
+          "G",
+          "G#",
+          "D"
+        ],
+        "Cmin": [
+          "Eb",
+          "F#",
+          "Bb"
+        ],
+        "Cmin6": [
+          "Eb",
+          "F#",
+          "Bb",
+          "C"
+        ],
+        "Cmin7": [
+          "Eb",
+          "F#",
+          "Bb",
+          "C#"
+        ],
+        "Cmin(add9)": [
+          "Eb",
+          "F#",
+          "Bb",
+          "F"
+        ],
+        "Cmin9": [
+          "Eb",
+          "F#",
+          "Bb",
+          "C#",
+          "F"
+        ],
+        "Cmin11": [
+          "Eb",
+          "F#",
+          "Bb",
+          "C#",
+          "F",
+          "Ab"
+        ],
+        "Cmin7(b5)": [
+          "Eb",
+          "F#",
+          "Gb",
+          "C#"
+        ],
+        "Cmin9(b5)": [
+          "Eb",
+          "F#",
+          "Gb",
+          "C#",
+          "F"
+        ],
+        "Cmin(7+)": [
+          "Eb",
+          "F#",
+          "Bb",
+          "D"
+        ],
+        "Cmin9(7+)": [
+          "Eb",
+          "F#",
+          "Bb",
+          "D",
+          "F"
+        ],
+        "C9": [
+          "Eb",
+          "G",
+          "Bb",
+          "C#",
+          "F"
+        ],
+        "C11": [
+          "Eb",
+          "G",
+          "Bb",
+          "C#",
+          "F",
+          "Ab"
+        ],
+        "C13(b5)": [
+          "Eb",
+          "G",
+          "Gb",
+          "C#",
+          "F",
+          "C"
+        ],
+        "C7(9+5+)": [
+          "Eb",
+          "G",
+          "G#",
+          "C#",
+          "F"
+        ],
+        "C7(b9)": [
+          "Eb",
+          "G",
+          "Bb",
+          "C#",
+          "Db"
+        ],
+        "C13(b9)": [
+          "Eb",
+          "G",
+          "Bb",
+          "C#",
+          "Db",
+          "C"
+        ],
+        "Cdim": [
+          "Eb",
+          "F#",
+          "Gb",
+          "C"
+        ],
+        "Csus13": [
+          "Eb",
+          "Ab",
+          "Bb",
+          "C"
+        ],
+        "C7sus4(b9)": [
+          "Eb",
+          "Ab",
+          "Bb",
+          "C#",
+          "Db"
+        ]
+      },
+      "E": {
+        "Cmaj": [
+          "E",
+          "Ab",
+          "B"
+        ],
+        "Cadd9": [
+          "E",
+          "Ab",
+          "B",
+          "F#"
+        ],
+        "Cmaj7": [
+          "E",
+          "Ab",
+          "B",
+          "Eb"
+        ],
+        "Cmaj9(11+)": [
+          "E",
+          "Ab",
+          "B",
+          "Eb",
+          "F#",
+          "Bb"
+        ],
+        "Cmaj7(5+)": [
+          "E",
+          "Ab",
+          "G#",
+          "Eb"
+        ],
+        "Cmin": [
+          "E",
+          "G",
+          "B"
+        ],
+        "Cmin6": [
+          "E",
+          "G",
+          "B",
+          "C#"
+        ],
+        "Cmin7": [
+          "E",
+          "G",
+          "B",
+          "D"
+        ],
+        "Cmin(add9)": [
+          "E",
+          "G",
+          "B",
+          "F#"
+        ],
+        "Cmin9": [
+          "E",
+          "G",
+          "B",
+          "D",
+          "F#"
+        ],
+        "Cmin11": [
+          "E",
+          "G",
+          "B",
+          "D",
+          "F#",
+          "A"
+        ],
+        "Cmin7(b5)": [
+          "E",
+          "G",
+          "Gb",
+          "D"
+        ],
+        "Cmin9(b5)": [
+          "E",
+          "G",
+          "Gb",
+          "D",
+          "F#"
+        ],
+        "Cmin(7+)": [
+          "E",
+          "G",
+          "B",
+          "Eb"
+        ],
+        "Cmin9(7+)": [
+          "E",
+          "G",
+          "B",
+          "Eb",
+          "F#"
+        ],
+        "C9": [
+          "E",
+          "Ab",
+          "B",
+          "D",
+          "F#"
+        ],
+        "C11": [
+          "E",
+          "Ab",
+          "B",
+          "D",
+          "F#",
+          "A"
+        ],
+        "C13(b5)": [
+          "E",
+          "Ab",
+          "Gb",
+          "D",
+          "F#",
+          "C#"
+        ],
+        "C7(9+5+)": [
+          "E",
+          "Ab",
+          "G#",
+          "D",
+          "F#"
+        ],
+        "C7(b9)": [
+          "E",
+          "Ab",
+          "B",
+          "D",
+          "Db"
+        ],
+        "C13(b9)": [
+          "E",
+          "Ab",
+          "B",
+          "D",
+          "Db",
+          "C#"
+        ],
+        "Cdim": [
+          "E",
+          "G",
+          "Gb",
+          "C#"
+        ],
+        "Csus13": [
+          "E",
+          "A",
+          "B",
+          "C#"
+        ],
+        "C7sus4(b9)": [
+          "E",
+          "A",
+          "B",
+          "D",
+          "Db"
+        ]
+      },
+      "F": {
+        "Cmaj": [
+          "F",
+          "A",
+          "C"
+        ],
+        "Cadd9": [
+          "F",
+          "A",
+          "C",
+          "G"
+        ],
+        "Cmaj7": [
+          "F",
+          "A",
+          "C",
+          "E"
+        ],
+        "Cmaj9(11+)": [
+          "F",
+          "A",
+          "C",
+          "E",
+          "G",
+          "B"
+        ],
+        "Cmaj7(5+)": [
+          "F",
+          "A",
+          "G#",
+          "E"
+        ],
+        "Cmin": [
+          "F",
+          "Ab",
+          "C"
+        ],
+        "Cmin6": [
+          "F",
+          "Ab",
+          "C",
+          "D"
+        ],
+        "Cmin7": [
+          "F",
+          "Ab",
+          "C",
+          "Eb"
+        ],
+        "Cmin(add9)": [
+          "F",
+          "Ab",
+          "C",
+          "G"
+        ],
+        "Cmin9": [
+          "F",
+          "Ab",
+          "C",
+          "Eb",
+          "G"
+        ],
+        "Cmin11": [
+          "F",
+          "Ab",
+          "C",
+          "Eb",
+          "G",
+          "Bb"
+        ],
+        "Cmin7(b5)": [
+          "F",
+          "Ab",
+          "Gb",
+          "Eb"
+        ],
+        "Cmin9(b5)": [
+          "F",
+          "Ab",
+          "Gb",
+          "Eb",
+          "G"
+        ],
+        "Cmin(7+)": [
+          "F",
+          "Ab",
+          "C",
+          "E"
+        ],
+        "Cmin9(7+)": [
+          "F",
+          "Ab",
+          "C",
+          "E",
+          "G"
+        ],
+        "C9": [
+          "F",
+          "A",
+          "C",
+          "Eb",
+          "G"
+        ],
+        "C11": [
+          "F",
+          "A",
+          "C",
+          "Eb",
+          "G",
+          "Bb"
+        ],
+        "C13(b5)": [
+          "F",
+          "A",
+          "Gb",
+          "Eb",
+          "G",
+          "D"
+        ],
+        "C7(9+5+)": [
+          "F",
+          "A",
+          "G#",
+          "Eb",
+          "G"
+        ],
+        "C7(b9)": [
+          "F",
+          "A",
+          "C",
+          "Eb",
+          "Db"
+        ],
+        "C13(b9)": [
+          "F",
+          "A",
+          "C",
+          "Eb",
+          "Db",
+          "D"
+        ],
+        "Cdim": [
+          "F",
+          "Ab",
+          "Gb",
+          "D"
+        ],
+        "Csus13": [
+          "F",
+          "Bb",
+          "C",
+          "D"
+        ],
+        "C7sus4(b9)": [
+          "F",
+          "Bb",
+          "C",
+          "Eb",
+          "Db"
+        ]
+      },
+      "F#": {
+        "Cmaj": [
+          "F#",
+          "Bb",
+          "C#"
+        ],
+        "Cadd9": [
+          "F#",
+          "Bb",
+          "C#",
+          "Ab"
+        ],
+        "Cmaj7": [
+          "F#",
+          "Bb",
+          "C#",
+          "F"
+        ],
+        "Cmaj9(11+)": [
+          "F#",
+          "Bb",
+          "C#",
+          "F",
+          "Ab",
+          "C"
+        ],
+        "Cmaj7(5+)": [
+          "F#",
+          "Bb",
+          "G#",
+          "F"
+        ],
+        "Cmin": [
+          "F#",
+          "A",
+          "C#"
+        ],
+        "Cmin6": [
+          "F#",
+          "A",
+          "C#",
+          "Eb"
+        ],
+        "Cmin7": [
+          "F#",
+          "A",
+          "C#",
+          "E"
+        ],
+        "Cmin(add9)": [
+          "F#",
+          "A",
+          "C#",
+          "Ab"
+        ],
+        "Cmin9": [
+          "F#",
+          "A",
+          "C#",
+          "E",
+          "Ab"
+        ],
+        "Cmin11": [
+          "F#",
+          "A",
+          "C#",
+          "E",
+          "Ab",
+          "B"
+        ],
+        "Cmin7(b5)": [
+          "F#",
+          "A",
+          "Gb",
+          "E"
+        ],
+        "Cmin9(b5)": [
+          "F#",
+          "A",
+          "Gb",
+          "E",
+          "Ab"
+        ],
+        "Cmin(7+)": [
+          "F#",
+          "A",
+          "C#",
+          "F"
+        ],
+        "Cmin9(7+)": [
+          "F#",
+          "A",
+          "C#",
+          "F",
+          "Ab"
+        ],
+        "C9": [
+          "F#",
+          "Bb",
+          "C#",
+          "E",
+          "Ab"
+        ],
+        "C11": [
+          "F#",
+          "Bb",
+          "C#",
+          "E",
+          "Ab",
+          "B"
+        ],
+        "C13(b5)": [
+          "F#",
+          "Bb",
+          "Gb",
+          "E",
+          "Ab",
+          "Eb"
+        ],
+        "C7(9+5+)": [
+          "F#",
+          "Bb",
+          "G#",
+          "E",
+          "Ab"
+        ],
+        "C7(b9)": [
+          "F#",
+          "Bb",
+          "C#",
+          "E",
+          "Db"
+        ],
+        "C13(b9)": [
+          "F#",
+          "Bb",
+          "C#",
+          "E",
+          "Db",
+          "Eb"
+        ],
+        "Cdim": [
+          "F#",
+          "A",
+          "Gb",
+          "Eb"
+        ],
+        "Csus13": [
+          "F#",
+          "B",
+          "C#",
+          "Eb"
+        ],
+        "C7sus4(b9)": [
+          "F#",
+          "B",
+          "C#",
+          "E",
+          "Db"
+        ]
+      },
+      "G": {
+        "Cmaj": [
+          "G",
+          "B",
+          "D"
+        ],
+        "Cadd9": [
+          "G",
+          "B",
+          "D",
+          "A"
+        ],
+        "Cmaj7": [
+          "G",
+          "B",
+          "D",
+          "F#"
+        ],
+        "Cmaj9(11+)": [
+          "G",
+          "B",
+          "D",
+          "F#",
+          "A",
+          "C#"
+        ],
+        "Cmaj7(5+)": [
+          "G",
+          "B",
+          "G#",
+          "F#"
+        ],
+        "Cmin": [
+          "G",
+          "Bb",
+          "D"
+        ],
+        "Cmin6": [
+          "G",
+          "Bb",
+          "D",
+          "E"
+        ],
+        "Cmin7": [
+          "G",
+          "Bb",
+          "D",
+          "F"
+        ],
+        "Cmin(add9)": [
+          "G",
+          "Bb",
+          "D",
+          "A"
+        ],
+        "Cmin9": [
+          "G",
+          "Bb",
+          "D",
+          "F",
+          "A"
+        ],
+        "Cmin11": [
+          "G",
+          "Bb",
+          "D",
+          "F",
+          "A",
+          "C"
+        ],
+        "Cmin7(b5)": [
+          "G",
+          "Bb",
+          "Gb",
+          "F"
+        ],
+        "Cmin9(b5)": [
+          "G",
+          "Bb",
+          "Gb",
+          "F",
+          "A"
+        ],
+        "Cmin(7+)": [
+          "G",
+          "Bb",
+          "D",
+          "F#"
+        ],
+        "Cmin9(7+)": [
+          "G",
+          "Bb",
+          "D",
+          "F#",
+          "A"
+        ],
+        "C9": [
+          "G",
+          "B",
+          "D",
+          "F",
+          "A"
+        ],
+        "C11": [
+          "G",
+          "B",
+          "D",
+          "F",
+          "A",
+          "C"
+        ],
+        "C13(b5)": [
+          "G",
+          "B",
+          "Gb",
+          "F",
+          "A",
+          "E"
+        ],
+        "C7(9+5+)": [
+          "G",
+          "B",
+          "G#",
+          "F",
+          "A"
+        ],
+        "C7(b9)": [
+          "G",
+          "B",
+          "D",
+          "F",
+          "Db"
+        ],
+        "C13(b9)": [
+          "G",
+          "B",
+          "D",
+          "F",
+          "Db",
+          "E"
+        ],
+        "Cdim": [
+          "G",
+          "Bb",
+          "Gb",
+          "E"
+        ],
+        "Csus13": [
+          "G",
+          "C",
+          "D",
+          "E"
+        ],
+        "C7sus4(b9)": [
+          "G",
+          "C",
+          "D",
+          "F",
+          "Db"
+        ]
+      },
+      "Ab": {
+        "Cmaj": [
+          "Ab",
+          "C",
+          "Eb"
+        ],
+        "Cadd9": [
+          "Ab",
+          "C",
+          "Eb",
+          "Bb"
+        ],
+        "Cmaj7": [
+          "Ab",
+          "C",
+          "Eb",
+          "G"
+        ],
+        "Cmaj9(11+)": [
+          "Ab",
+          "C",
+          "Eb",
+          "G",
+          "Bb",
+          "D"
+        ],
+        "Cmaj7(5+)": [
+          "Ab",
+          "C",
+          "G#",
+          "G"
+        ],
+        "Cmin": [
+          "Ab",
+          "B",
+          "Eb"
+        ],
+        "Cmin6": [
+          "Ab",
+          "B",
+          "Eb",
+          "F"
+        ],
+        "Cmin7": [
+          "Ab",
+          "B",
+          "Eb",
+          "F#"
+        ],
+        "Cmin(add9)": [
+          "Ab",
+          "B",
+          "Eb",
+          "Bb"
+        ],
+        "Cmin9": [
+          "Ab",
+          "B",
+          "Eb",
+          "F#",
+          "Bb"
+        ],
+        "Cmin11": [
+          "Ab",
+          "B",
+          "Eb",
+          "F#",
+          "Bb",
+          "C#"
+        ],
+        "Cmin7(b5)": [
+          "Ab",
+          "B",
+          "Gb",
+          "F#"
+        ],
+        "Cmin9(b5)": [
+          "Ab",
+          "B",
+          "Gb",
+          "F#",
+          "Bb"
+        ],
+        "Cmin(7+)": [
+          "Ab",
+          "B",
+          "Eb",
+          "G"
+        ],
+        "Cmin9(7+)": [
+          "Ab",
+          "B",
+          "Eb",
+          "G",
+          "Bb"
+        ],
+        "C9": [
+          "Ab",
+          "C",
+          "Eb",
+          "F#",
+          "Bb"
+        ],
+        "C11": [
+          "Ab",
+          "C",
+          "Eb",
+          "F#",
+          "Bb",
+          "C#"
+        ],
+        "C13(b5)": [
+          "Ab",
+          "C",
+          "Gb",
+          "F#",
+          "Bb",
+          "F"
+        ],
+        "C7(9+5+)": [
+          "Ab",
+          "C",
+          "G#",
+          "F#",
+          "Bb"
+        ],
+        "C7(b9)": [
+          "Ab",
+          "C",
+          "Eb",
+          "F#",
+          "Db"
+        ],
+        "C13(b9)": [
+          "Ab",
+          "C",
+          "Eb",
+          "F#",
+          "Db",
+          "F"
+        ],
+        "Cdim": [
+          "Ab",
+          "B",
+          "Gb",
+          "F"
+        ],
+        "Csus13": [
+          "Ab",
+          "C#",
+          "Eb",
+          "F"
+        ],
+        "C7sus4(b9)": [
+          "Ab",
+          "C#",
+          "Eb",
+          "F#",
+          "Db"
+        ]
+      },
+      "A": {
+        "Cmaj": [
+          "A",
+          "C#",
+          "E"
+        ],
+        "Cadd9": [
+          "A",
+          "C#",
+          "E",
+          "B"
+        ],
+        "Cmaj7": [
+          "A",
+          "C#",
+          "E",
+          "Ab"
+        ],
+        "Cmaj9(11+)": [
+          "A",
+          "C#",
+          "E",
+          "Ab",
+          "B",
+          "Eb"
+        ],
+        "Cmaj7(5+)": [
+          "A",
+          "C#",
+          "G#",
+          "Ab"
+        ],
+        "Cmin": [
+          "A",
+          "C",
+          "E"
+        ],
+        "Cmin6": [
+          "A",
+          "C",
+          "E",
+          "F#"
+        ],
+        "Cmin7": [
+          "A",
+          "C",
+          "E",
+          "G"
+        ],
+        "Cmin(add9)": [
+          "A",
+          "C",
+          "E",
+          "B"
+        ],
+        "Cmin9": [
+          "A",
+          "C",
+          "E",
+          "G",
+          "B"
+        ],
+        "Cmin11": [
+          "A",
+          "C",
+          "E",
+          "G",
+          "B",
+          "D"
+        ],
+        "Cmin7(b5)": [
+          "A",
+          "C",
+          "Gb",
+          "G"
+        ],
+        "Cmin9(b5)": [
+          "A",
+          "C",
+          "Gb",
+          "G",
+          "B"
+        ],
+        "Cmin(7+)": [
+          "A",
+          "C",
+          "E",
+          "Ab"
+        ],
+        "Cmin9(7+)": [
+          "A",
+          "C",
+          "E",
+          "Ab",
+          "B"
+        ],
+        "C9": [
+          "A",
+          "C#",
+          "E",
+          "G",
+          "B"
+        ],
+        "C11": [
+          "A",
+          "C#",
+          "E",
+          "G",
+          "B",
+          "D"
+        ],
+        "C13(b5)": [
+          "A",
+          "C#",
+          "Gb",
+          "G",
+          "B",
+          "F#"
+        ],
+        "C7(9+5+)": [
+          "A",
+          "C#",
+          "G#",
+          "G",
+          "B"
+        ],
+        "C7(b9)": [
+          "A",
+          "C#",
+          "E",
+          "G",
+          "Db"
+        ],
+        "C13(b9)": [
+          "A",
+          "C#",
+          "E",
+          "G",
+          "Db",
+          "F#"
+        ],
+        "Cdim": [
+          "A",
+          "C",
+          "Gb",
+          "F#"
+        ],
+        "Csus13": [
+          "A",
+          "D",
+          "E",
+          "F#"
+        ],
+        "C7sus4(b9)": [
+          "A",
+          "D",
+          "E",
+          "G",
+          "Db"
+        ]
+      },
+      "Bb": {
+        "Cmaj": [
+          "Bb",
+          "D",
+          "F"
+        ],
+        "Cadd9": [
+          "Bb",
+          "D",
+          "F",
+          "C"
+        ],
+        "Cmaj7": [
+          "Bb",
+          "D",
+          "F",
+          "A"
+        ],
+        "Cmaj9(11+)": [
+          "Bb",
+          "D",
+          "F",
+          "A",
+          "C",
+          "E"
+        ],
+        "Cmaj7(5+)": [
+          "Bb",
+          "D",
+          "G#",
+          "A"
+        ],
+        "Cmin": [
+          "Bb",
+          "C#",
+          "F"
+        ],
+        "Cmin6": [
+          "Bb",
+          "C#",
+          "F",
+          "G"
+        ],
+        "Cmin7": [
+          "Bb",
+          "C#",
+          "F",
+          "Ab"
+        ],
+        "Cmin(add9)": [
+          "Bb",
+          "C#",
+          "F",
+          "C"
+        ],
+        "Cmin9": [
+          "Bb",
+          "C#",
+          "F",
+          "Ab",
+          "C"
+        ],
+        "Cmin11": [
+          "Bb",
+          "C#",
+          "F",
+          "Ab",
+          "C",
+          "Eb"
+        ],
+        "Cmin7(b5)": [
+          "Bb",
+          "C#",
+          "Gb",
+          "Ab"
+        ],
+        "Cmin9(b5)": [
+          "Bb",
+          "C#",
+          "Gb",
+          "Ab",
+          "C"
+        ],
+        "Cmin(7+)": [
+          "Bb",
+          "C#",
+          "F",
+          "A"
+        ],
+        "Cmin9(7+)": [
+          "Bb",
+          "C#",
+          "F",
+          "A",
+          "C"
+        ],
+        "C9": [
+          "Bb",
+          "D",
+          "F",
+          "Ab",
+          "C"
+        ],
+        "C11": [
+          "Bb",
+          "D",
+          "F",
+          "Ab",
+          "C",
+          "Eb"
+        ],
+        "C13(b5)": [
+          "Bb",
+          "D",
+          "Gb",
+          "Ab",
+          "C",
+          "G"
+        ],
+        "C7(9+5+)": [
+          "Bb",
+          "D",
+          "G#",
+          "Ab",
+          "C"
+        ],
+        "C7(b9)": [
+          "Bb",
+          "D",
+          "F",
+          "Ab",
+          "Db"
+        ],
+        "C13(b9)": [
+          "Bb",
+          "D",
+          "F",
+          "Ab",
+          "Db",
+          "G"
+        ],
+        "Cdim": [
+          "Bb",
+          "C#",
+          "Gb",
+          "G"
+        ],
+        "Csus13": [
+          "Bb",
+          "Eb",
+          "F",
+          "G"
+        ],
+        "C7sus4(b9)": [
+          "Bb",
+          "Eb",
+          "F",
+          "Ab",
+          "Db"
+        ]
+      },
+      "B": {
+        "Cmaj": [
+          "B",
+          "Eb",
+          "F#"
+        ],
+        "Cadd9": [
+          "B",
+          "Eb",
+          "F#",
+          "C#"
+        ],
+        "Cmaj7": [
+          "B",
+          "Eb",
+          "F#",
+          "Bb"
+        ],
+        "Cmaj9(11+)": [
+          "B",
+          "Eb",
+          "F#",
+          "Bb",
+          "C#",
+          "F"
+        ],
+        "Cmaj7(5+)": [
+          "B",
+          "Eb",
+          "G#",
+          "Bb"
+        ],
+        "Cmin": [
+          "B",
+          "D",
+          "F#"
+        ],
+        "Cmin6": [
+          "B",
+          "D",
+          "F#",
+          "Ab"
+        ],
+        "Cmin7": [
+          "B",
+          "D",
+          "F#",
+          "A"
+        ],
+        "Cmin(add9)": [
+          "B",
+          "D",
+          "F#",
+          "C#"
+        ],
+        "Cmin9": [
+          "B",
+          "D",
+          "F#",
+          "A",
+          "C#"
+        ],
+        "Cmin11": [
+          "B",
+          "D",
+          "F#",
+          "A",
+          "C#",
+          "E"
+        ],
+        "Cmin7(b5)": [
+          "B",
+          "D",
+          "Gb",
+          "A"
+        ],
+        "Cmin9(b5)": [
+          "B",
+          "D",
+          "Gb",
+          "A",
+          "C#"
+        ],
+        "Cmin(7+)": [
+          "B",
+          "D",
+          "F#",
+          "Bb"
+        ],
+        "Cmin9(7+)": [
+          "B",
+          "D",
+          "F#",
+          "Bb",
+          "C#"
+        ],
+        "C9": [
+          "B",
+          "Eb",
+          "F#",
+          "A",
+          "C#"
+        ],
+        "C11": [
+          "B",
+          "Eb",
+          "F#",
+          "A",
+          "C#",
+          "E"
+        ],
+        "C13(b5)": [
+          "B",
+          "Eb",
+          "Gb",
+          "A",
+          "C#",
+          "Ab"
+        ],
+        "C7(9+5+)": [
+          "B",
+          "Eb",
+          "G#",
+          "A",
+          "C#"
+        ],
+        "C7(b9)": [
+          "B",
+          "Eb",
+          "F#",
+          "A",
+          "Db"
+        ],
+        "C13(b9)": [
+          "B",
+          "Eb",
+          "F#",
+          "A",
+          "Db",
+          "Ab"
+        ],
+        "Cdim": [
+          "B",
+          "D",
+          "Gb",
+          "Ab"
+        ],
+        "Csus13": [
+          "B",
+          "E",
+          "F#",
+          "Ab"
+        ],
+        "C7sus4(b9)": [
+          "B",
+          "E",
+          "F#",
+          "A",
+          "Db"
+        ]
+      }
+    },
+    "axel_fisch_ecm_complete_procedure": {
+      "metadata": {
+        "title": "Grille ECM Axel Fisch - Procédure Complète pour GPT",
+        "composer": "Axel Fisch",
+        "style": "Ballade jazz moderne ECM européenne raffinée",
+        "created_date": "2025-01-08",
+        "version": "2.0",
+        "description": "Documentation exhaustive de la grille d'accords et procédure détaillée pour génération automatique par GPT",
+        "environment_setup": {
+          "python_version": "3.11+",
+          "virtual_env": "~/env-musique",
+          "required_libraries": [
+            "music21==9.7.1",
+            "mido==1.3.3"
+          ],
+          "installation_commands": [
+            "python3 -m venv ~/env-musique",
+            "source ~/env-musique/bin/activate",
+            "pip install music21",
+            "pip install mido"
+          ]
+        }
+      },
+      "chord_progression_complete": {
+        "key": "F minor",
+        "time_signature": "4/4",
+        "tempo_bpm": 70,
+        "tempo_description": "Modéré, rubato possible (60-75 BPM)",
+        "total_measures": 16,
+        "structure": "Forme libre ECM, respirations harmoniques",
+        "original_grid": "| Fmin   Fmin/Ab   | Ab/C                | Dbmaj7   Db/F       | Ebadd9/G        |\n| Abmaj(#11)       | G7/B                | Cmin     Cmin/Eb    | F7/A   Bbmin7   |\n| Cmin7(5+)        | Ab/Bb               | Db/Eb    Db7(b9)    | Abmaj7(#5) Abmaj13 |\n| G7sus4  G/B      | Cmin7               | C7sus4   C/E        | Fmin9           |",
+        "measures_detailed": [
+          {
+            "measure": 1,
+            "chords": [
+              "Fmin",
+              "Fmin/Ab"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "Tonic establishment with chromatic bass movement",
+            "bass_movement": "F -> Ab (minor third ascent)",
+            "ecm_characteristics": "Slash chord creates open voicing, bass independence",
+            "voicing_notes": {
+              "Fmin": [
+                "F3",
+                "Ab3",
+                "C4",
+                "F4"
+              ],
+              "Fmin/Ab": [
+                "Ab2",
+                "F3",
+                "Ab3",
+                "C4"
+              ]
+            }
+          },
+          {
+            "measure": 2,
+            "chords": [
+              "Ab/C"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Subdominant with mediant bass",
+            "bass_movement": "C (mediant bass creates suspension)",
+            "ecm_characteristics": "Second inversion creates floating harmony",
+            "voicing_notes": {
+              "Ab/C": [
+                "C3",
+                "Ab3",
+                "C4",
+                "Eb4"
+              ]
+            }
+          },
+          {
+            "measure": 3,
+            "chords": [
+              "Dbmaj7",
+              "Db/F"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "bVI major 7th, ECM color harmony",
+            "bass_movement": "Db -> F (ascending fourth)",
+            "ecm_characteristics": "Major 7th adds crystalline quality, slash chord variation",
+            "voicing_notes": {
+              "Dbmaj7": [
+                "Db3",
+                "F3",
+                "Ab3",
+                "C4"
+              ],
+              "Db/F": [
+                "F2",
+                "Db3",
+                "F3",
+                "Ab3"
+              ]
+            }
+          },
+          {
+            "measure": 4,
+            "chords": [
+              "Ebadd9/G"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "bVII add9 with bass on major third",
+            "bass_movement": "G (creates dominant preparation)",
+            "ecm_characteristics": "Add9 without 7th, open modern sound",
+            "voicing_notes": {
+              "Ebadd9/G": [
+                "G2",
+                "Eb3",
+                "G3",
+                "Bb3",
+                "F4"
+              ]
+            }
+          },
+          {
+            "measure": 5,
+            "chords": [
+              "Abmaj(#11)"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Lydian color chord, ECM signature sound",
+            "bass_movement": "Ab (subdominant stability)",
+            "ecm_characteristics": "Sharp 11 creates Lydian mode, ethereal quality",
+            "voicing_notes": {
+              "Abmaj(#11)": [
+                "Ab2",
+                "C3",
+                "Eb3",
+                "D4"
+              ]
+            }
+          },
+          {
+            "measure": 6,
+            "chords": [
+              "G7/B"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Secondary dominant with bass on major third",
+            "bass_movement": "B (leading tone creates tension)",
+            "ecm_characteristics": "First inversion dominant, less aggressive",
+            "voicing_notes": {
+              "G7/B": [
+                "B2",
+                "G3",
+                "B3",
+                "D4",
+                "F4"
+              ]
+            }
+          },
+          {
+            "measure": 7,
+            "chords": [
+              "Cmin",
+              "Cmin/Eb"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "Relative major, modal interchange",
+            "bass_movement": "C -> Eb (minor third ascent)",
+            "ecm_characteristics": "Simple triad to slash chord progression",
+            "voicing_notes": {
+              "Cmin": [
+                "C3",
+                "Eb3",
+                "G3"
+              ],
+              "Cmin/Eb": [
+                "Eb2",
+                "C3",
+                "Eb3",
+                "G3"
+              ]
+            }
+          },
+          {
+            "measure": 8,
+            "chords": [
+              "F7/A",
+              "Bbmin7"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "Dominant with bass on major third, iv7",
+            "bass_movement": "A -> Bb (semitone ascent)",
+            "ecm_characteristics": "Chromatic bass movement, minor 7th resolution",
+            "voicing_notes": {
+              "F7/A": [
+                "A2",
+                "F3",
+                "A3",
+                "C4",
+                "Eb4"
+              ],
+              "Bbmin7": [
+                "Bb2",
+                "Db3",
+                "F3",
+                "Ab3"
+              ]
+            }
+          },
+          {
+            "measure": 9,
+            "chords": [
+              "Cmin7(5+)"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Augmented 5th tension, harmonic climax",
+            "bass_movement": "C (relative major center)",
+            "ecm_characteristics": "Augmented 5th creates instability, modern tension",
+            "voicing_notes": {
+              "Cmin7(5+)": [
+                "C3",
+                "Eb3",
+                "G#3",
+                "Bb3"
+              ]
+            }
+          },
+          {
+            "measure": 10,
+            "chords": [
+              "Ab/Bb"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Subdominant over dominant pedal",
+            "bass_movement": "Bb (dominant pedal creates suspension)",
+            "ecm_characteristics": "Polychord effect, floating harmony",
+            "voicing_notes": {
+              "Ab/Bb": [
+                "Bb2",
+                "Ab3",
+                "C4",
+                "Eb4"
+              ]
+            }
+          },
+          {
+            "measure": 11,
+            "chords": [
+              "Db/Eb",
+              "Db7(b9)"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "bVI over bVII, altered dominant",
+            "bass_movement": "Eb -> Db (descending tone)",
+            "ecm_characteristics": "Slash chord to altered dominant progression",
+            "voicing_notes": {
+              "Db/Eb": [
+                "Eb2",
+                "Db3",
+                "F3",
+                "Ab3"
+              ],
+              "Db7(b9)": [
+                "Db3",
+                "F3",
+                "Ab3",
+                "Cb4",
+                "D4"
+              ]
+            }
+          },
+          {
+            "measure": 12,
+            "chords": [
+              "Abmaj7(#5)",
+              "Abmaj13"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "Augmented major 7th, extended 13th",
+            "bass_movement": "Ab (subdominant stability with extensions)",
+            "ecm_characteristics": "Complex extensions, crystalline harmonies",
+            "voicing_notes": {
+              "Abmaj7(#5)": [
+                "Ab2",
+                "C3",
+                "E3",
+                "G3"
+              ],
+              "Abmaj13": [
+                "Ab2",
+                "C3",
+                "Eb3",
+                "G3",
+                "Bb3",
+                "F4"
+              ]
+            }
+          },
+          {
+            "measure": 13,
+            "chords": [
+              "G7sus4",
+              "G/B"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "Suspended dominant, resolution preparation",
+            "bass_movement": "G -> B (ascending major third)",
+            "ecm_characteristics": "Suspension to resolution, gentle approach",
+            "voicing_notes": {
+              "G7sus4": [
+                "G2",
+                "C3",
+                "D3",
+                "F3"
+              ],
+              "G/B": [
+                "B2",
+                "G3",
+                "B3",
+                "D4"
+              ]
+            }
+          },
+          {
+            "measure": 14,
+            "chords": [
+              "Cmin7"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Relative major minor 7th",
+            "bass_movement": "C (relative stability)",
+            "ecm_characteristics": "Simple minor 7th, breathing space",
+            "voicing_notes": {
+              "Cmin7": [
+                "C3",
+                "Eb3",
+                "G3",
+                "Bb3"
+              ]
+            }
+          },
+          {
+            "measure": 15,
+            "chords": [
+              "C7sus4",
+              "C/E"
+            ],
+            "duration_per_chord": "2 beats each",
+            "harmonic_function": "Suspended dominant of F, bass on major third",
+            "bass_movement": "C -> E (ascending major third)",
+            "ecm_characteristics": "Suspension to first inversion resolution",
+            "voicing_notes": {
+              "C7sus4": [
+                "C3",
+                "F3",
+                "G3",
+                "Bb3"
+              ],
+              "C/E": [
+                "E2",
+                "C3",
+                "E3",
+                "G3"
+              ]
+            }
+          },
+          {
+            "measure": 16,
+            "chords": [
+              "Fmin9"
+            ],
+            "duration_per_chord": "4 beats",
+            "harmonic_function": "Tonic resolution with 9th extension",
+            "bass_movement": "F (final tonic resolution)",
+            "ecm_characteristics": "Extended tonic, open ending",
+            "voicing_notes": {
+              "Fmin9": [
+                "F2",
+                "Ab2",
+                "C3",
+                "Eb3",
+                "G3"
+              ]
+            }
+          }
+        ]
+      },
+      "ecm_style_characteristics": {
+        "harmonic_principles": [
+          "Slash chords pour mouvement de basse indépendant",
+          "Tensions sophistiquées sans résolution forcée",
+          "Voicings ouverts avec intervalles de 4tes et 5tes",
+          "Couleurs modales (Lydien, Dorien) privilégiées",
+          "Respirations harmoniques entre les accords"
+        ],
+        "voicing_techniques": [
+          "Omission fréquente de la tierce pour créer ambiguïté",
+          "Tensions placées dans le registre aigu",
+          "Basses indépendantes via slash chords",
+          "Espacement large entre les voix",
+          "Couleurs harmoniques plutôt que fonctions strictes"
+        ],
+        "rhythmic_approach": [
+          "Phrasé rubato, souplesse temporelle",
+          "Dynamiques subtiles, éviter contrastes marqués",
+          "Arpèges délicats plutôt qu'accords plaqués",
+          "Respirations naturelles dans le phrasé",
+          "Tempo flexible selon l'expression"
+        ],
+        "sonic_qualities": [
+          "Sonorité cristalline caractéristique ECM",
+          "Réverbération naturelle, espaces acoustiques",
+          "Clarté de chaque voix dans l'ensemble",
+          "Ambiances plutôt que rythmes marqués",
+          "Intimité et contemplation"
+        ]
+      },
+      "chord_voicings_complete": {
+        "Fmin": {
+          "notes": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "midi_numbers": [
+            53,
+            56,
+            60
+          ],
+          "voicing_type": "Root position minor triad",
+          "ecm_adaptation": "Espacer les voix, éviter doublures"
+        },
+        "Fmin/Ab": {
+          "notes": [
+            "Ab",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "midi_numbers": [
+            44,
+            53,
+            56,
+            60
+          ],
+          "voicing_type": "First inversion with doubled bass",
+          "ecm_adaptation": "Basse indépendante, voicing ouvert"
+        },
+        "Ab/C": {
+          "notes": [
+            "C",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "midi_numbers": [
+            48,
+            56,
+            60,
+            63
+          ],
+          "voicing_type": "Second inversion major",
+          "ecm_adaptation": "Suspension harmonique, basse médiane"
+        },
+        "Dbmaj7": {
+          "notes": [
+            "Db",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "midi_numbers": [
+            49,
+            53,
+            56,
+            60
+          ],
+          "voicing_type": "Root position major 7th",
+          "ecm_adaptation": "7ème majeure pour couleur cristalline"
+        },
+        "Db/F": {
+          "notes": [
+            "F",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "midi_numbers": [
+            41,
+            49,
+            53,
+            56
+          ],
+          "voicing_type": "Second inversion major",
+          "ecm_adaptation": "Mouvement de basse ascendant"
+        },
+        "Ebadd9/G": {
+          "notes": [
+            "G",
+            "Eb",
+            "G",
+            "Bb",
+            "F"
+          ],
+          "midi_numbers": [
+            43,
+            51,
+            55,
+            58,
+            65
+          ],
+          "voicing_type": "Third inversion add9",
+          "ecm_adaptation": "Add9 sans 7ème, sonorité ouverte"
+        },
+        "Abmaj(#11)": {
+          "notes": [
+            "Ab",
+            "C",
+            "Eb",
+            "D"
+          ],
+          "midi_numbers": [
+            44,
+            48,
+            51,
+            62
+          ],
+          "voicing_type": "Lydian color chord",
+          "ecm_adaptation": "11ème augmentée signature ECM"
+        },
+        "G7/B": {
+          "notes": [
+            "B",
+            "G",
+            "B",
+            "D",
+            "F"
+          ],
+          "midi_numbers": [
+            47,
+            55,
+            59,
+            62,
+            65
+          ],
+          "voicing_type": "First inversion dominant 7th",
+          "ecm_adaptation": "Dominante moins agressive en renversement"
+        },
+        "Cmin": {
+          "notes": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "midi_numbers": [
+            48,
+            51,
+            55
+          ],
+          "voicing_type": "Root position minor triad",
+          "ecm_adaptation": "Triade simple, respiration harmonique"
+        },
+        "Cmin/Eb": {
+          "notes": [
+            "Eb",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "midi_numbers": [
+            39,
+            48,
+            51,
+            55
+          ],
+          "voicing_type": "First inversion minor",
+          "ecm_adaptation": "Mouvement de basse chromatique"
+        },
+        "F7/A": {
+          "notes": [
+            "A",
+            "F",
+            "A",
+            "C",
+            "Eb"
+          ],
+          "midi_numbers": [
+            45,
+            53,
+            57,
+            60,
+            63
+          ],
+          "voicing_type": "Second inversion dominant 7th",
+          "ecm_adaptation": "Tierce à la basse, tension douce"
+        },
+        "Bbmin7": {
+          "notes": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "midi_numbers": [
+            46,
+            49,
+            53,
+            56
+          ],
+          "voicing_type": "Root position minor 7th",
+          "ecm_adaptation": "Accord de repos, couleur mineure"
+        },
+        "Cmin7(5+)": {
+          "notes": [
+            "C",
+            "Eb",
+            "G#",
+            "Bb"
+          ],
+          "midi_numbers": [
+            48,
+            51,
+            56,
+            58
+          ],
+          "voicing_type": "Minor 7th with augmented 5th",
+          "ecm_adaptation": "5ème augmentée crée instabilité moderne"
+        },
+        "Ab/Bb": {
+          "notes": [
+            "Bb",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "midi_numbers": [
+            46,
+            56,
+            60,
+            63
+          ],
+          "voicing_type": "Subdominant over dominant pedal",
+          "ecm_adaptation": "Effet polychord, harmonie flottante"
+        },
+        "Db/Eb": {
+          "notes": [
+            "Eb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "midi_numbers": [
+            39,
+            49,
+            53,
+            56
+          ],
+          "voicing_type": "bVI over bVII",
+          "ecm_adaptation": "Couleur modale, suspension"
+        },
+        "Db7(b9)": {
+          "notes": [
+            "Db",
+            "F",
+            "Ab",
+            "Cb",
+            "D"
+          ],
+          "midi_numbers": [
+            49,
+            53,
+            56,
+            59,
+            62
+          ],
+          "voicing_type": "Dominant 7th flat 9",
+          "ecm_adaptation": "9ème bémol pour tension contrôlée"
+        },
+        "Abmaj7(#5)": {
+          "notes": [
+            "Ab",
+            "C",
+            "E",
+            "G"
+          ],
+          "midi_numbers": [
+            44,
+            48,
+            52,
+            55
+          ],
+          "voicing_type": "Major 7th augmented 5th",
+          "ecm_adaptation": "5ème augmentée + 7ème majeure"
+        },
+        "Abmaj13": {
+          "notes": [
+            "Ab",
+            "C",
+            "Eb",
+            "G",
+            "Bb",
+            "F"
+          ],
+          "midi_numbers": [
+            44,
+            48,
+            51,
+            55,
+            58,
+            65
+          ],
+          "voicing_type": "Major 13th extended",
+          "ecm_adaptation": "Extensions complètes, richesse harmonique"
+        },
+        "G7sus4": {
+          "notes": [
+            "G",
+            "C",
+            "D",
+            "F"
+          ],
+          "midi_numbers": [
+            43,
+            48,
+            50,
+            53
+          ],
+          "voicing_type": "Suspended 4th dominant",
+          "ecm_adaptation": "Suspension évite résolution forcée"
+        },
+        "G/B": {
+          "notes": [
+            "B",
+            "G",
+            "B",
+            "D"
+          ],
+          "midi_numbers": [
+            47,
+            55,
+            59,
+            62
+          ],
+          "voicing_type": "First inversion major triad",
+          "ecm_adaptation": "Résolution douce du sus4"
+        },
+        "Cmin7": {
+          "notes": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "midi_numbers": [
+            48,
+            51,
+            55,
+            58
+          ],
+          "voicing_type": "Root position minor 7th",
+          "ecm_adaptation": "Accord de repos, stabilité relative"
+        },
+        "C7sus4": {
+          "notes": [
+            "C",
+            "F",
+            "G",
+            "Bb"
+          ],
+          "midi_numbers": [
+            48,
+            53,
+            55,
+            58
+          ],
+          "voicing_type": "Suspended 4th dominant",
+          "ecm_adaptation": "Préparation à la résolution finale"
+        },
+        "C/E": {
+          "notes": [
+            "E",
+            "C",
+            "E",
+            "G"
+          ],
+          "midi_numbers": [
+            40,
+            48,
+            52,
+            55
+          ],
+          "voicing_type": "First inversion major triad",
+          "ecm_adaptation": "Mouvement vers résolution finale"
+        },
+        "Fmin9": {
+          "notes": [
+            "F",
+            "Ab",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "midi_numbers": [
+            41,
+            44,
+            48,
+            51,
+            55
+          ],
+          "voicing_type": "Minor 9th extended",
+          "ecm_adaptation": "Résolution étendue, ouverture finale"
+        }
+      },
+      "generation_procedure_for_gpt": {
+        "step_1_environment_setup": {
+          "action": "Configurer l'environnement Python",
+          "commands": [
+            "python3 -m venv ~/env-musique",
+            "source ~/env-musique/bin/activate",
+            "pip install music21",
+            "pip install mido"
+          ],
+          "verification": [
+            "python3 -c \"import music21; print('music21 version:', music21.__version__)\"",
+            "python3 -c \"import mido; print('mido importé avec succès')\""
+          ]
+        },
+        "step_2_chord_analysis": {
+          "action": "Analyser la grille d'accords",
+          "details": [
+            "Identifier la tonalité principale (F mineur)",
+            "Analyser les fonctions harmoniques de chaque accord",
+            "Repérer les caractéristiques ECM (slash chords, tensions)",
+            "Documenter les mouvements de basse"
+          ]
+        },
+        "step_3_voicing_creation": {
+          "action": "Créer les voicings ECM",
+          "principles": [
+            "Appliquer les voicings ouverts",
+            "Utiliser les tensions appropriées",
+            "Respecter les mouvements de basse des slash chords",
+            "Maintenir la sonorité cristalline ECM"
+          ]
+        },
+        "step_4_musicxml_generation": {
+          "action": "Générer le fichier MusicXML",
+          "code_template": "#!/usr/bin/env python3\nfrom music21 import stream, meter, tempo, key, chord, duration, metadata\n\ndef generate_musicxml():\n    score = stream.Score()\n    score.metadata = metadata.Metadata()\n    score.metadata.title = 'Grille ECM Axel Fisch'\n    score.metadata.composer = 'Axel Fisch'\n    \n    part = stream.Part()\n    part.append(meter.TimeSignature('4/4'))\n    part.append(key.KeySignature(-4))  # F minor\n    part.append(tempo.TempoIndication(number=70))\n    \n    # Ajouter les accords selon la grille\n    # ...\n    \n    score.append(part)\n    score.write('musicxml', fp='output.musicxml')\n    return score"
+        },
+        "step_5_midi_generation": {
+          "action": "Générer le fichier MIDI",
+          "code_template": "#!/usr/bin/env python3\nimport mido\n\ndef create_midi_file():\n    mid = mido.MidiFile(type=1)\n    mid.ticks_per_beat = 480\n    \n    # Piste de tempo\n    tempo_track = mido.MidiTrack()\n    tempo_track.append(mido.MetaMessage('set_tempo', tempo=mido.bpm2tempo(70)))\n    mid.tracks.append(tempo_track)\n    \n    # Piste d'accords\n    chord_track = mido.MidiTrack()\n    # Ajouter les accords selon les voicings\n    # ...\n    \n    mid.tracks.append(chord_track)\n    mid.save('output.mid')\n    return mid"
+        },
+        "step_6_documentation": {
+          "action": "Créer la documentation complète",
+          "includes": [
+            "Fichier JSON avec toutes les données",
+            "README explicatif",
+            "Instructions d'utilisation",
+            "Caractéristiques ECM détaillées"
+          ]
+        }
+      },
+      "technical_specifications": {
+        "musicxml_specs": {
+          "software": "music21 Python library v9.7.1",
+          "time_signature": "4/4",
+          "key_signature": "F minor (-4 flats)",
+          "tempo": "70 BPM",
+          "clefs": [
+            "Treble",
+            "Bass"
+          ],
+          "measures": 16,
+          "chord_symbols": "Included with each chord"
+        },
+        "midi_specs": {
+          "format": "Type 1 MIDI file",
+          "tracks": 3,
+          "track_0": "Tempo and metadata",
+          "track_1": "Chord progression",
+          "track_2": "Bass line",
+          "ticks_per_beat": 480,
+          "velocity_range": "64-96 (medium to forte)",
+          "channels": [
+            "Channel 0: Piano",
+            "Channel 1: Bass"
+          ],
+          "programs": [
+            "0: Acoustic Grand Piano",
+            "32: Acoustic Bass"
+          ]
+        },
+        "json_specs": {
+          "encoding": "UTF-8",
+          "structure": "Nested objects with complete metadata",
+          "includes": [
+            "Complete chord progression",
+            "Detailed voicings with MIDI numbers",
+            "ECM style characteristics",
+            "Generation procedure",
+            "Technical specifications"
+          ]
+        }
+      },
+      "usage_instructions_for_gpt": {
+        "when_to_use": [
+          "Quand l'utilisateur demande une grille ECM",
+          "Pour générer des fichiers musicaux automatiquement",
+          "Comme référence pour le style Axel Fisch",
+          "Pour enseigner les caractéristiques ECM"
+        ],
+        "how_to_proceed": [
+          "1. Lire ce JSON comme référence complète",
+          "2. Configurer l'environnement selon step_1",
+          "3. Analyser la demande utilisateur",
+          "4. Adapter la grille si nécessaire",
+          "5. Générer les fichiers selon les étapes",
+          "6. Documenter le processus"
+        ],
+        "adaptation_guidelines": [
+          "Respecter les principes ECM",
+          "Maintenir les caractéristiques harmoniques",
+          "Adapter le tempo selon le contexte",
+          "Préserver les voicings ouverts",
+          "Documenter toute modification"
+        ]
+      },
+      "related_scales_and_modes": {
+        "primary_scales": {
+          "F_natural_minor": [
+            "F",
+            "G",
+            "Ab",
+            "Bb",
+            "C",
+            "Db",
+            "Eb"
+          ],
+          "F_harmonic_minor": [
+            "F",
+            "G",
+            "Ab",
+            "Bb",
+            "C",
+            "Db",
+            "E"
+          ],
+          "F_melodic_minor": [
+            "F",
+            "G",
+            "Ab",
+            "Bb",
+            "C",
+            "D",
+            "E"
+          ],
+          "F_dorian": [
+            "F",
+            "G",
+            "Ab",
+            "Bb",
+            "C",
+            "D",
+            "Eb"
+          ]
+        },
+        "modal_colors": {
+          "Ab_lydian": [
+            "Ab",
+            "Bb",
+            "C",
+            "D",
+            "Eb",
+            "F",
+            "G"
+          ],
+          "Bb_mixolydian": [
+            "Bb",
+            "C",
+            "D",
+            "Eb",
+            "F",
+            "G",
+            "Ab"
+          ],
+          "C_aeolian": [
+            "C",
+            "D",
+            "Eb",
+            "F",
+            "G",
+            "Ab",
+            "Bb"
+          ],
+          "Db_ionian": [
+            "Db",
+            "Eb",
+            "F",
+            "Gb",
+            "Ab",
+            "Bb",
+            "C"
+          ]
+        }
+      },
+      "chord_extensions_reference": {
+        "basic_triads": {
+          "major": "1-3-5",
+          "minor": "1-b3-5",
+          "diminished": "1-b3-b5",
+          "augmented": "1-3-#5"
+        },
+        "seventh_chords": {
+          "maj7": "1-3-5-7",
+          "min7": "1-b3-5-b7",
+          "dom7": "1-3-5-b7",
+          "min7b5": "1-b3-b5-b7"
+        },
+        "extended_chords": {
+          "add9": "1-3-5-9 (no 7th)",
+          "maj9": "1-3-5-7-9",
+          "min9": "1-b3-5-b7-9",
+          "maj13": "1-3-5-7-9-11-13"
+        },
+        "altered_tensions": {
+          "#11": "Lydian color, avoid 4th",
+          "b9": "Phrygian color, tension",
+          "#5": "Augmented color, instability",
+          "sus4": "Suspended 4th, avoid 3rd"
+        },
+        "slash_chords": {
+          "definition": "Chord with specific bass note",
+          "notation": "ChordSymbol/BassNote",
+          "function": "Independent bass movement",
+          "ecm_usage": "Creates open voicings and harmonic ambiguity"
+        }
+      }
+    },
+    "Aixel_Midi": {
+      "name": "aixel_generate_midi_chords_and_melody",
+      "version": "1.2",
+      "description": "Generate a MIDI file with sustained chord pads (full-bar, no rhythm) and an optional scale-aware melody. Supports 4/4 and 3/4.",
+      "inputs": {
+        "progression": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Chord symbols (e.g., [\"Cmaj7\",\"Am7\",\"Dm7\",\"G7\"]). Supports #/b, maj, maj7, m, m7, 7, dim, m7b5, aug, sus2/4, add9, slash bass."
+        },
+        "tempo": {
+          "type": "integer",
+          "default": 90,
+          "description": "BPM."
+        },
+        "time_signature": {
+          "type": "string",
+          "default": "4/4",
+          "description": "Meter 'N/D' (e.g., '4/4', '3/4')."
+        },
+        "structure": {
+          "type": "object",
+          "description": "Song sections in bars (chords are still sustained full-bar).",
+          "properties": {
+            "intro_bars": {
+              "type": "integer",
+              "default": 4
+            },
+            "chorus_bars": {
+              "type": "integer",
+              "default": 8
+            },
+            "hook_bars": {
+              "type": "integer",
+              "default": 4
+            },
+            "outro_bars": {
+              "type": "integer",
+              "default": 4
+            },
+            "bars_per_chord": {
+              "type": "number",
+              "default": 1.0
+            }
+          }
+        },
+        "melody": {
+          "type": "object",
+          "description": "Melody options (no drums).",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "instrument": {
+              "type": "integer",
+              "default": 73,
+              "description": "GM program for melody (e.g., 73=Flute, 81=Lead 1)."
+            },
+            "register": {
+              "type": "integer",
+              "default": 72,
+              "description": "Approx starting pitch (C5=72)."
+            },
+            "density": {
+              "type": "string",
+              "default": "medium",
+              "description": "one_of: low|medium|high (controls number of notes per bar)."
+            }
+          }
+        },
+        "instruments": {
+          "type": "object",
+          "description": "GM program numbers (0-127).",
+          "properties": {
+            "electric_piano": {
+              "type": "integer",
+              "default": 4
+            },
+            "pad": {
+              "type": "integer",
+              "default": 88
+            },
+            "bass": {
+              "type": "integer",
+              "default": 33
+            }
+          }
+        },
+        "include_bass": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sustained root or slash-bass per bar."
+        },
+        "output_path": {
+          "type": "string",
+          "default": "/mnt/data/aixel_song.mid",
+          "description": "Where to write the MIDI file."
+        },
+        "midiutil_src_dir": {
+          "type": "string",
+          "default": "/mnt/data/MIDIUtil-develop/MIDIUtil-develop/src",
+          "description": "Absolute path to midiutil/src if needed."
+        }
+      },
+      "steps": [
+        {
+          "id": "compose_and_render",
+          "language": "python",
+          "code": "import os, sys, re, random\n\nDEFAULT_SRC = \"/mnt/data/MIDIUtil-develop/MIDIUtil-develop/src\"\n\ndef _ensure_midiutil(src_dir):\n    try:\n        from midiutil import MIDIFile  # noqa: F401\n        return True\n    except Exception:\n        for cand in [src_dir, DEFAULT_SRC]:\n            if cand and os.path.isdir(cand):\n                if cand not in sys.path:\n                    sys.path.insert(0, cand)\n                try:\n                    from midiutil import MIDIFile  # noqa: F401\n                    return True\n                except Exception:\n                    pass\n        return False\n\nif not _ensure_midiutil(midiutil_src_dir):\n    raise RuntimeError(\"midiutil not available; ensure midiutil src is importable.\")\n\nfrom midiutil import MIDIFile\n\n# ----------------- helpers -----------------\n_base = { 'C':0,'D':2,'E':4,'F':5,'G':7,'A':9,'B':11 }\n\n_note_pat = re.compile(r'^([A-Ga-g])([#b]?)(\\d{0,1})$')\n\ndef _acc_to_semitone(letter, accidental):\n    val = _base[letter.upper()]\n    for ch in accidental:\n        if ch == '#': val += 1\n        elif ch == 'b': val -= 1\n    return val % 12\n\ndef note_name_to_midi(name, default_oct=4):\n    m = _note_pat.match(name)\n    if not m:\n        raise ValueError(f\"Bad note name: {name}\")\n    letter, acc, octv = m.groups()\n    octv = int(octv) if octv else default_oct\n    pc = _acc_to_semitone(letter, acc)\n    return 12 * (octv + 1) + pc\n\n# Chord parsing with a practical dictionary\nQUALITIES = {\n    'maj': [0,4,7], '': [0,4,7], 'm': [0,3,7], 'min': [0,3,7],\n    '7': [0,4,7,10], 'maj7': [0,4,7,11], 'ma7': [0,4,7,11], 'M7': [0,4,7,11],\n    'm7': [0,3,7,10], 'min7': [0,3,7,10], 'm7b5': [0,3,6,10], 'ø': [0,3,6,10],\n    'dim': [0,3,6], 'o': [0,3,6], 'aug': [0,4,8], '+': [0,4,8],\n    'sus2': [0,2,7], 'sus4': [0,5,7]\n}\n\nADD_EXTS = {\n    'add9': [14], '6': [9], '69': [9,14], '9': [14], '11': [17], '13': [21]\n}\n\ndef parse_chord_symbol(sym, default_oct=4):\n    sym = sym.strip()\n    main, bass = (sym.split('/') + [None])[:2] if '/' in sym else (sym, None)\n    m = re.match(r'^([A-Ga-g])([#b]?)(.*)$', main)\n    if not m:\n        raise ValueError(f\"Bad chord: {sym}\")\n    root_letter, root_acc, qual_raw = m.groups()\n    root_pc = _acc_to_semitone(root_letter, root_acc)\n\n    q = qual_raw.replace('Δ','maj').replace('Maj','maj').replace('min','m')\n    q = q.strip().lower()\n\n    # pick quality list\n    tones = None\n    for k,v in QUALITIES.items():\n        if q == k or (k and k in q):\n            tones = v\n            break\n    if tones is None:\n        # fallback: maj\n        tones = [0,4,7]\n\n    extras = []\n    for k, ext in ADD_EXTS.items():\n        if k in q:\n            extras.extend(ext)\n\n    root = 12 * (default_oct + 1) + root_pc\n    chord = [root + iv for iv in tones] + [root + iv for iv in extras]\n\n    # slash bass or root-12\n    bass_note = note_name_to_midi(bass, default_oct-1) if bass else root - 12\n    return chord, bass_note, q\n\n# Choose scale for melody based on chord quality (internal mapping, not external page)\nIONIAN = [0,2,4,5,7,9,11]\nDORIAN = [0,2,3,5,7,9,10]\nAEOLIAN = [0,2,3,5,7,8,10]\nMIXO   = [0,2,4,5,7,9,10]\nLOCR   = [0,1,3,5,6,8,10]\nLYDIAN = [0,2,4,6,7,9,11]\nWHOLET = [0,2,4,6,8,10]\nMAJ_PENTA = [0,2,4,7,9]\nMIN_PENTA = [0,3,5,7,10]\n\ndef scale_for_quality(root_midi, quality_str):\n    base = root_midi % 12\n    if 'm7b5' in quality_str or 'ø' in quality_str:\n        scale = LOCR\n    elif 'dim' in quality_str:\n        scale = LOCR\n    elif 'aug' in quality_str or '+' in quality_str:\n        scale = WHOLET\n    elif 'maj7' in quality_str or 'ma7' in quality_str or 'm7M' in quality_str:\n        scale = IONIAN\n    elif quality_str == 'm' or quality_str.startswith('madd'):\n        scale = AEOLIAN\n    elif 'm7' in quality_str:\n        scale = DORIAN\n    elif '7' in quality_str:\n        scale = MIXO\n    elif 'sus2' in quality_str or 'sus4' in quality_str:\n        scale = MAJ_PENTA\n    else:\n        scale = IONIAN\n    return [(base + d) % 12 for d in scale]\n\n# light voice-leading: keep chord tones in a comfortable band\ndef voice_chord(pitches, target_low=52, target_high=76, prev_avg=None):\n    # bring notes into range via octave shifts\n    out = []\n    for n in sorted(pitches):\n        x = n\n        while x < target_low: x += 12\n        while x > target_high: x -= 12\n        out.append(x)\n    if prev_avg is None:\n        return out\n    # shift collectively to minimize distance\n    best = out\n    best_dist = abs(sum(out)/len(out) - prev_avg)\n    for shift in (-12, 0, 12):\n        cand = [n+shift for n in out]\n        d = abs(sum(cand)/len(cand) - prev_avg)\n        if d < best_dist:\n            best, best_dist = cand, d\n    return best\n\n# Melody generator (fluid, chord-aware, no drums). Chord tones on strong beats, stepwise passing tones.\nrandom.seed(12)\n\ndef generate_melody(parsed_prog, start_time, beats_per_bar, bars_per_chord, base_pitch=72, density='medium', section_boost=0):\n    notes = []  # (pitch, t, dur, vel)\n    step_choices = {'low': 2, 'medium': 3, 'high': 4}[density]\n    t = start_time\n    for (chord_pitches, bass_p, q) in parsed_prog:\n        root = min(chord_pitches)\n        scale_pc = scale_for_quality(root, q)\n        bar_beats = beats_per_bar * bars_per_chord\n        beats = int(round(bar_beats))\n        # strong beats (1, maybe 3 in 4/4) -> chord tones\n        strong_beats = {0}\n        if beats >= 4:\n            strong_beats.add(2)\n        prev = base_pitch + section_boost\n        for b in range(beats):\n            # pick target pitch\n            if b in strong_beats:\n                # aim for nearest chord tone near prev\n                choices = [n for n in chord_pitches] + [n+12 for n in chord_pitches] + [n-12 for n in chord_pitches]\n            else:\n                # scale tones near prev\n                choices = []\n                for o in (-12, 0, 12):\n                    for pc in scale_pc:\n                        choices.append((root - (root%12)) + pc + 12 + o)\n            # select nearest, allow small leap sometimes\n            cand = min(choices, key=lambda x: abs(x - prev))\n            if random.random() < 0.2:\n                cand += random.choice([-2, 2, -3, 3])\n            pitch = int(max(55, min(96, cand)))\n            dur = 1.0  # quarter-note steps; stays musical but not too busy\n            vel = 80 + min(15, section_boost)\n            notes.append((pitch, t + b*1.0, dur*0.98, vel))\n            prev = pitch\n        t += bar_beats\n    return notes\n\n# ----------------- main composition -----------------\nnum_tracks = 4  # EP, Pad, Melody, Bass\nmidi = MIDIFile(numTracks=num_tracks)\n\n# time signature handling\ntry:\n    ts_num, ts_den = map(int, time_signature.split('/'))\nexcept Exception:\n    ts_num, ts_den = 4, 4\n\n# denominator power-of-two value for MIDI meta\n_den_pow_map = {1:0, 2:1, 4:2, 8:3, 16:4, 32:5}\n_den_pow = _den_pow_map.get(ts_den, 2)\n\n# global tempo & meter\nfor tr in range(num_tracks):\n    midi.addTempo(tr, 0, tempo)\n    midi.addTimeSignature(tr, 0, ts_num, _den_pow, 24)\n\n# programs\nCH_EP, CH_PAD, CH_MEL, CH_BASS = 0, 1, 2, 3\nmidi.addProgramChange(0, CH_EP, 0, instruments.get('electric_piano', 4))\nmidi.addProgramChange(1, CH_PAD, 0, instruments.get('pad', 88))\nmidi.addProgramChange(2, CH_MEL, 0, melody.get('instrument', 73) if 'melody' in globals() else 73)\nmidi.addProgramChange(3, CH_BASS, 0, instruments.get('bass', 33))\n\nbeats_per_bar = ts_num * (4/ts_den)  # 4/4 -> 4, 3/4 -> 3\nbpc = structure.get('bars_per_chord', 1.0)\n\n# expand progression across sections\nprog = progression if progression else [\"Cmaj7\",\"Am7\",\"Dm7\",\"G7\"]\n\ndef expand(prog_sym, bars_needed):\n    out = []\n    i = 0\n    while len(out) * bpc < bars_needed:\n        out.append(prog_sym[i % len(prog_sym)])\n        i += 1\n    return out\n\nintro_syms = expand(prog, structure.get('intro_bars', 4))\nchorus_syms = expand(prog, structure.get('chorus_bars', 8))\nhook_syms   = expand(prog, structure.get('hook_bars', 4))\noutro_syms  = expand(prog, structure.get('outro_bars', 4))\n\n# parse all\n\ndef parse_list(syms):\n    parsed = []\n    for s in syms:\n        chord, bass, q = parse_chord_symbol(s, default_oct=4)\n        parsed.append((chord, bass, q))\n    return parsed\n\nintro = parse_list(intro_syms)\nchorus = parse_list(chorus_syms)\nhook   = parse_list(hook_syms)\noutro  = parse_list(outro_syms)\n\n# write sustained chords (full-bar, no rhythm), EP+Pad doubled an octave above for air\ncur = 0.0\nprev_avg = None\n\nfor section_idx, section in enumerate([intro, chorus, hook, outro]):\n    for chord_pitches, bass_p, q in section:\n        dur = beats_per_bar * bpc\n        # voice chords once per bar (no rhythm)\n        voiced = voice_chord(chord_pitches, target_low=52, target_high=76, prev_avg=prev_avg)\n        prev_avg = sum(voiced)/len(voiced)\n        for n in voiced:\n            midi.addNote(0, CH_EP, n, cur, dur, 82)\n            midi.addNote(1, CH_PAD, n+12, cur, dur, 70)\n        if include_bass:\n            midi.addNote(3, CH_BASS, bass_p, cur, dur, 72)\n        cur += dur\n\n# Melody across sections (denser in hook)\nif melody.get('enabled', True):\n    base = melody.get('register', 72)\n    dens = melody.get('density', 'medium')\n    t0 = 0.0\n    mel_intro = generate_melody(intro, t0, beats_per_bar, bpc, base_pitch=base-5, density='low', section_boost=0)\n    t0 += len(intro) * beats_per_bar * bpc\n    mel_chorus = generate_melody(chorus, t0, beats_per_bar, bpc, base_pitch=base, density=dens, section_boost=6)\n    t0 += len(chorus) * beats_per_bar * bpc\n    mel_hook = generate_melody(hook, t0, beats_per_bar, bpc, base_pitch=base+2, density='high', section_boost=10)\n    t0 += len(hook) * beats_per_bar * bpc\n    mel_outro = generate_melody(outro, t0, beats_per_bar, bpc, base_pitch=base-7, density='low', section_boost=0)\n\n    for coll in [mel_intro, mel_chorus, mel_hook, mel_outro]:\n        for p, t, d, v in coll:\n            midi.addNote(2, CH_MEL, int(p), t, d, v)\n\n# write file\nos.makedirs(os.path.dirname(output_path), exist_ok=True)\nwith open(output_path, 'wb') as f:\n    midi.writeFile(f)\n\nprint(output_path)\n"
+        }
+      ],
+      "outputs": {
+        "midi_path": {
+          "from": "compose_and_render",
+          "type": "string",
+          "description": "Absolute path to the generated MIDI file."
+        }
+      },
+      "example_call": {
+        "progression": [
+          "Cmaj7",
+          "Am7",
+          "Dm7",
+          "G7"
+        ],
+        "tempo": 92,
+        "time_signature": "3/4",
+        "structure": {
+          "intro_bars": 4,
+          "chorus_bars": 8,
+          "hook_bars": 4,
+          "outro_bars": 4,
+          "bars_per_chord": 1
+        },
+        "melody": {
+          "enabled": true,
+          "instrument": 73,
+          "register": 72,
+          "density": "medium"
+        },
+        "instruments": {
+          "electric_piano": 4,
+          "pad": 88,
+          "bass": 33
+        },
+        "include_bass": true,
+        "output_path": "/mnt/data/aixel_demo.mid",
+        "midiutil_src_dir": "/mnt/data/MIDIUtil-develop/MIDIUtil-develop/src"
+      }
+    },
+    "Infos add pour coposer-2025": {
+      "error_loading_file": "Extra data: line 15 column 1 (char 519)",
+      "file": "/mnt/data/Infos add pour coposer-2025.json"
+    },
+    "additional_resources": {
+      "orchestration_prompt": "Orchestration dans le style d’Axel Fisch — 6 voix: V1(mélodie), V2(harmonie), Alto1/2, Cello(contrechant), Basse(active), Piano(facultatif). Accords: add9, sus2, sus4, maj7(11+), min9, 13(b9).",
+      "form_structure": "A-A-B-A (32 mesures), souvent précédée d’un intro vamp et suivie d’une coda douce.",
+      "harmonic_rhythm": "1–2 accords par mesure, tension fin mesure → résolution début suivante.",
+      "signature_elements": [
+        "Approche → Tension → Résolution",
+        "Voicings clairs, expressifs, espacés (9e, 10e)",
+        "Substitutions modales et tritonales douces",
+        "Basse active avec lignes chromatiques ou arpégiques"
+      ],
+      "dynamic_guidelines": "Respirations, rubato, crescendos collectifs, contrechants expressifs."
+    }
+  },
+  "api_endpoints": {
+    "/compose": {
+      "description": "Génère une progression ou une pièce orchestrée dans le style Axel Fisch.",
+      "method": "POST",
+      "input": {
+        "key": "C major",
+        "style": "jazz_waltz",
+        "structure": "AABA",
+        "tempo": 80
+      },
+      "output": "MusicXML/MIDI + JSON summary"
+    },
+    "/orchestrate": {
+      "description": "Crée une orchestration complète à partir d’une mélodie ou d’une grille d’accords.",
+      "method": "POST",
+      "input": {
+        "melody": "array of MIDI or pitch data",
+        "chords": "array of chord symbols",
+        "instruments": "optional override of default 6-voice setup"
+      },
+      "output": "Full orchestration (MusicXML/MIDI)"
+    }
+  }
+}

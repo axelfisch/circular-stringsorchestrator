@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Circular Selector Animations */
+.ring {
+  transition: transform 0.6s ease-in-out, opacity 0.3s ease;
+}
+
+.ring:hover {
+  transform: scale(1.02);
+}
+
+.active-glow {
+  filter: drop-shadow(0 0 15px #60A5FA) drop-shadow(0 0 30px #0EA5E9);
+  animation: pulse-glow 0.8s ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%   {
+    opacity: 1;
+    filter: drop-shadow(0 0 25px #93C5FD);
+  }
+  50%  {
+    opacity: 1;
+    filter: drop-shadow(0 0 35px #60A5FA);
+  }
+  100% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 15px #3B82F6);
+  }
+}
+
+/* Smooth rotation for chord selector */
+.rotate-smooth {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Beat indicator pulse */
+.beat-pulse {
+  animation: beat-indicator 0.4s ease-out;
+}
+
+@keyframes beat-indicator {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Chord segment hover effect */
+.chord-segment {
+  transition: all 0.3s ease;
+}
+
+.chord-segment:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+
+/* Extension ring highlight */
+.extension-highlight {
+  animation: extension-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes extension-glow {
+  from {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.5));
+  }
+  to {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.8));
+  }
+}
+
+/* Sequencer bar active state */
+.bar-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(14, 165, 233, 0.3) 100%);
+  border-color: #60A5FA;
+  animation: bar-highlight 0.3s ease-out;
+}
+
+@keyframes bar-highlight {
+  0% {
+    transform: scale(0.98);
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* Play button animation */
+.play-button {
+  transition: all 0.2s ease;
+}
+
+.play-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+}
+
+.play-button:active {
+  transform: scale(0.95);
+}
+
+/* Loading spinner for audio initialization */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Fade in animation for chord display */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth slider transitions */
+.slider-thumb {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+}
+
+/* ECM-style subtle animations */
+.ecm-fade {
+  animation: ecmFade 0.8s ease-in-out;
+}
+
+@keyframes ecmFade {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Orchestration panel animations */
+.voice-entry {
+  animation: voiceSlideIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes voiceSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.voice-entry:nth-child(1) { animation-delay: 0.05s; }
+.voice-entry:nth-child(2) { animation-delay: 0.1s; }
+.voice-entry:nth-child(3) { animation-delay: 0.15s; }
+.voice-entry:nth-child(4) { animation-delay: 0.2s; }
+.voice-entry:nth-child(5) { animation-delay: 0.25s; }
+.voice-entry:nth-child(6) { animation-delay: 0.3s; }
+
+/* Voice note pulse */
+.voice-active {
+  animation: voicePulse 0.6s ease-in-out;
+}
+
+@keyframes voicePulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F172A;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Button hover glow effects */
+.btn-glow-green:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.btn-glow-amber:hover {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+}
+
+.btn-glow-blue:hover {
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+}
