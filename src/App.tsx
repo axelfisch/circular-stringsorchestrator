@@ -4,21 +4,13 @@ import CircularSelector from './components/CircularSelector';
 import ChordDisplay from './components/ChordDisplay';
 import ChordSequencer from './components/ChordSequencer';
 import OrchestrationPanel from './components/orchestrationpanel_v2';
-
-export interface ChordInSequence {
-  id: string;
-  key: string;
-  extension: string;
-  bassInversion?: string;
-  isForeignBass?: boolean;
-  beat: number;
-  position?: 1 | 2;
-}
-
-export interface BarConfig {
-  barNumber: number;
-  chordCount: 1 | 2;
-}
+import {
+  addChordToFirstAvailable,
+  createEmptyMeasures,
+  removeSequenceChord,
+  SequenceChord,
+  toggleMeasureSplit
+} from './utils/sequencerModel';
 
 function App() {
   const [selectedKey, setSelectedKey] = useState<string>('C');
@@ -26,10 +18,7 @@ function App() {
   const [selectedBassInversion, setSelectedBassInversion] = useState<string>('');
   const [isForeignBass, setIsForeignBass] = useState<boolean>(false);
   const [selectedStyle, setSelectedStyle] = useState<string>('');
-  const [chordSequence, setChordSequence] = useState<ChordInSequence[]>([]);
-  const [barConfigs, setBarConfigs] = useState<BarConfig[]>(
-    Array.from({ length: 8 }, (_, i) => ({ barNumber: i + 1, chordCount: 1 }))
-  );
+  const [measures, setMeasures] = useState(createEmptyMeasures);
   const [timeSignature] = useState<string>('4/4');
 
   const handleSelectionChange = (key: string, extension: string, bassInversion?: string, isForeign?: boolean) => {
@@ -44,25 +33,24 @@ function App() {
   };
 
   const handleAddChord = () => {
-    if (selectedKey && chordSequence.length < 8) {
-      const newChord: ChordInSequence = {
+    if (selectedKey) {
+      const newChord: SequenceChord = {
         id: `${Date.now()}-${Math.random()}`,
         key: selectedKey,
         extension: selectedExtension,
         bassInversion: selectedBassInversion,
-        isForeignBass: isForeignBass,
-        beat: chordSequence.length + 1
+        isForeignBass
       };
-      setChordSequence([...chordSequence, newChord]);
+      setMeasures((current) => addChordToFirstAvailable(current, newChord));
     }
   };
 
   const handleRemoveChord = (id: string) => {
-    setChordSequence(chordSequence.filter(chord => chord.id !== id));
+    setMeasures((current) => removeSequenceChord(current, id));
   };
 
   const handleClearSequence = () => {
-    setChordSequence([]);
+    setMeasures(createEmptyMeasures());
   };
 
   return (
@@ -132,12 +120,11 @@ function App() {
       <div className="max-w-[1600px] mx-auto w-full px-2">
         <ChordSequencer
           timeSignature={timeSignature}
-          sequence={chordSequence}
+          measures={measures}
           selectedStyle={selectedStyle}
-          barConfigs={barConfigs}
           onRemoveChord={handleRemoveChord}
           onClearSequence={handleClearSequence}
-          onBarConfigChange={setBarConfigs}
+          onToggleMeasure={(measureIndex) => setMeasures((current) => toggleMeasureSplit(current, measureIndex))}
         />
       </div>
     </div>
