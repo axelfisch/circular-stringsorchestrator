@@ -1,25 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Square, SkipBack, Download, Split } from 'lucide-react';
-import { ChordInSequence, BarConfig } from '../App';
 import { AudioEngine } from '../utils/audioEngine';
+import { countSequenceChords, SequenceMeasure } from '../utils/sequencerModel';
 
 interface ChordSequencerProps {
   timeSignature: string;
-  sequence: ChordInSequence[];
+  measures: SequenceMeasure[];
   selectedStyle: string;
-  barConfigs: BarConfig[];
   onRemoveChord: (id: string) => void;
   onClearSequence: () => void;
-  onBarConfigChange: (configs: BarConfig[]) => void;
+  onToggleMeasure: (measureIndex: number) => void;
 }
 
-export default function ChordSequencer({ timeSignature, sequence, selectedStyle, barConfigs, onRemoveChord, onClearSequence, onBarConfigChange }: ChordSequencerProps) {
+export default function ChordSequencer({ timeSignature, measures, selectedStyle, onRemoveChord, onClearSequence, onToggleMeasure }: ChordSequencerProps) {
   const [tempo, setTempo] = useState(120);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loopEnabled, setLoopEnabled] = useState(false);
   const [currentBar, setCurrentBar] = useState<number>(-1);
   const audioEngineRef = useRef<AudioEngine | null>(null);
-  const maxSlots = 8;
+  const chordCount = countSequenceChords(measures);
 
   useEffect(() => {
     audioEngineRef.current = new AudioEngine();
@@ -37,10 +36,19 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
     }
   }, [tempo]);
 
+  useEffect(() => {
+    const engine = audioEngineRef.current;
+    if (!engine || engine.getPlaybackState() === 'stopped') return;
+
+    engine.stop();
+    setIsPlaying(false);
+    setCurrentBar(-1);
+  }, [measures, tempo]);
+
   const handlePlayPause = async () => {
     if (!audioEngineRef.current) return;
 
-    if (sequence.length === 0) {
+    if (chordCount === 0) {
       return;
     }
 
@@ -48,15 +56,17 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
       audioEngineRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioEngineRef.current.scheduleSequence(
-        sequence,
-        barConfigs,
-        tempo,
-        loopEnabled,
-        (barIndex) => {
-          setCurrentBar(barIndex);
-        }
-      );
+      if (audioEngineRef.current.getPlaybackState() === 'stopped') {
+        audioEngineRef.current.scheduleSequence(
+          measures,
+          tempo,
+          loopEnabled,
+          (barIndex) => {
+            setCurrentBar(barIndex);
+            if (barIndex === -1) setIsPlaying(false);
+          }
+        );
+      }
       await audioEngineRef.current.play();
       setIsPlaying(true);
     }
@@ -75,14 +85,23 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
     if (isPlaying && audioEngineRef.current) {
       audioEngineRef.current.stop();
       audioEngineRef.current.scheduleSequence(
-        sequence,
-        barConfigs,
+        measures,
         tempo,
         !loopEnabled,
-        (barIndex) => setCurrentBar(barIndex)
+        (barIndex) => {
+          setCurrentBar(barIndex);
+          if (barIndex === -1) setIsPlaying(false);
+        }
       );
       audioEngineRef.current.play();
     }
+  };
+
+  const handlePrevious = () => {
+    if (!audioEngineRef.current) return;
+    audioEngineRef.current.rewind();
+    setIsPlaying(false);
+    setCurrentBar(-1);
   };
   return (
     <div className="space-y-4 w-full">
@@ -97,7 +116,7 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-[#CBD5F5]">{timeSignature} — 8 measures</span>
-            {sequence.length > 0 && (
+            {chordCount > 0 && (
               <button
                 onClick={onClearSequence}
                 className="text-xs text-[#64748B] hover:text-[#F87171] transition-colors"
@@ -109,19 +128,14 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 md:gap-3">
-          {Array.from({ length: maxSlots }).map((_, index) => {
-            const barConfig = barConfigs[index];
-            const chord = sequence[index];
-            const isSplit = barConfig.chordCount === 2;
+          {measures.map((measure, index) => {
+            const firstChord = measure.slots[0];
+            const secondChord = measure.slots[1];
+            const isSplit = measure.chordCount === 2;
 
             const toggleBarSplit = (e: React.MouseEvent) => {
               e.stopPropagation();
-              const newConfigs = [...barConfigs];
-              newConfigs[index] = {
-                ...barConfig,
-                chordCount: barConfig.chordCount === 1 ? 2 : 1
-              };
-              onBarConfigChange(newConfigs);
+              onToggleMeasure(index);
             };
 
             return (
@@ -141,20 +155,20 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
                         flex-1 rounded-lg p-3 min-h-[100px] flex flex-col items-center justify-center
                         border transition-all duration-200
                         ${
-                          chord
+                          firstChord
                             ? currentBar === index
                               ? 'bg-gradient-to-br from-[#F59E0B] to-[#D97706] border-[#FCD34D]/50 shadow-xl'
                               : 'bg-gradient-to-br from-[#16A34A] to-[#15803D] border-[#4ADE80]/30 shadow-lg hover:scale-105 cursor-pointer'
                             : 'bg-[#1E293B] border-[#334155] border-dashed'
                         }
                       `}
-                      onClick={() => chord && onRemoveChord(chord.id)}
+                      onClick={() => firstChord && onRemoveChord(firstChord.id)}
                     >
                       <div className="text-[10px] text-[#CBD5F5] mb-1">{index + 1}.1</div>
-                      {chord ? (
+                      {firstChord ? (
                         <>
                           <div className="text-sm font-bold text-white text-center">
-                            {chord.key}{chord.extension}
+                            {firstChord.key}{firstChord.extension}
                           </div>
                           <div className="text-[10px] text-[#E5E7EB] mt-1">2 beats</div>
                         </>
@@ -166,12 +180,29 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
                       )}
                     </div>
                     <div
-                      className="flex-1 rounded-lg p-3 min-h-[100px] flex flex-col items-center justify-center
-                        bg-[#1E293B] border-[#334155] border-dashed border transition-all duration-200"
+                      className={`flex-1 rounded-lg p-3 min-h-[100px] flex flex-col items-center justify-center border transition-all duration-200 ${
+                        secondChord
+                          ? currentBar === index
+                            ? 'bg-gradient-to-br from-[#F59E0B] to-[#D97706] border-[#FCD34D]/50 shadow-xl'
+                            : 'bg-gradient-to-br from-[#16A34A] to-[#15803D] border-[#4ADE80]/30 shadow-lg hover:scale-105 cursor-pointer'
+                          : 'bg-[#1E293B] border-[#334155] border-dashed'
+                      }`}
+                      onClick={() => secondChord && onRemoveChord(secondChord.id)}
                     >
                       <div className="text-[10px] text-[#CBD5F5] mb-1">{index + 1}.2</div>
-                      <div className="text-xl text-[#64748B]">—</div>
-                      <div className="text-[10px] text-[#64748B] mt-1">2 beats</div>
+                      {secondChord ? (
+                        <>
+                          <div className="text-sm font-bold text-white text-center">
+                            {secondChord.key}{secondChord.extension}
+                          </div>
+                          <div className="text-[10px] text-[#E5E7EB] mt-1">2 beats</div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="text-xl text-[#64748B]">—</div>
+                          <div className="text-[10px] text-[#64748B] mt-1">2 beats</div>
+                        </>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -180,20 +211,20 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
                       rounded-lg p-4 min-h-[100px] flex flex-col items-center justify-center
                       border transition-all duration-200
                       ${
-                        chord
+                        firstChord
                           ? currentBar === index
                             ? 'bg-gradient-to-br from-[#F59E0B] to-[#D97706] border-[#FCD34D]/50 shadow-xl scale-110'
                             : 'bg-gradient-to-br from-[#16A34A] to-[#15803D] border-[#4ADE80]/30 shadow-lg hover:scale-105 cursor-pointer'
                           : 'bg-[#1E293B] border-[#334155] border-dashed'
                       }
                     `}
-                    onClick={() => chord && onRemoveChord(chord.id)}
+                    onClick={() => firstChord && onRemoveChord(firstChord.id)}
                   >
                     <div className="text-xs text-[#CBD5F5] mb-1">bar {index + 1}</div>
-                    {chord ? (
+                    {firstChord ? (
                       <>
                         <div className="text-lg font-bold text-white text-center">
-                          {chord.key}{chord.extension}
+                          {firstChord.key}{firstChord.extension}
                         </div>
                         <div className="text-xs text-[#E5E7EB] mt-1">4 beats</div>
                       </>
@@ -246,8 +277,6 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
                 className="w-full bg-[#1E293B] text-[#F9FAFB] text-sm rounded-lg px-3 py-2 border border-[#334155] focus:outline-none focus:border-[#16A34A]"
               >
                 <option value="4/4">4/4</option>
-                <option value="3/4">3/4</option>
-                <option value="6/8">6/8</option>
               </select>
             </div>
           </div>
@@ -255,7 +284,7 @@ export default function ChordSequencer({ timeSignature, sequence, selectedStyle,
           {/* Center: Transport Controls */}
           <div className="flex items-center justify-center gap-2">
             <button
-              onClick={() => {}}
+              onClick={handlePrevious}
               className="p-2.5 rounded-full bg-transparent border border-[#1E293B] text-[#E5E7EB] hover:bg-[#1E293B] transition-all"
               title="Previous"
             >

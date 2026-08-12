@@ -2,9 +2,9 @@
 // Electric Piano Sampler with ECM-style sound
 
 import * as Tone from 'tone';
-import { ChordInSequence, BarConfig } from '../App';
 import { chordToMidiNotes } from './chordMapper';
 import { getEPSampler, initAudio } from './epSampler';
+import { buildPlaybackEvents, SequenceMeasure } from './sequencerModel';
 
 interface ScheduledNote {
   notes: string[];
@@ -22,6 +22,11 @@ export class AudioEngine {
   private animationFrameId: number | null = null;
   private startTimestamp: number = 0;
   private isPlaying: boolean = false;
+  private pausedAt = 0;
+  private totalDuration = 0;
+  private loopEnabled = false;
+  private onBeat?: (barIndex: number) => void;
+  private lastReportedBar = -1;
 
   constructor() {
     this.initializeSampler();
@@ -62,69 +67,61 @@ export class AudioEngine {
   }
 
   scheduleSequence(
-    sequence: ChordInSequence[],
-    barConfigs: BarConfig[],
+    measures: SequenceMeasure[],
     tempo: number,
-    _loop: boolean,
-    _onBeat?: (barIndex: number) => void
+    loop: boolean,
+    onBeat?: (barIndex: number) => void
   ) {
-    void _loop;
-    void _onBeat;
     this.scheduledNotes = [];
     const beatsPerBar = 4;
     const secondsPerBeat = 60 / tempo;
+    this.loopEnabled = loop;
+    this.onBeat = onBeat;
+    this.totalDuration = measures.length * beatsPerBar * secondsPerBeat;
+    this.pausedAt = 0;
+    this.lastReportedBar = -1;
 
-    barConfigs.forEach((config, barIndex) => {
-      const chordsInBar = sequence.filter(c => c.beat === barIndex + 1);
-
-      if (config.chordCount === 1 && chordsInBar.length > 0) {
-        const chord = chordsInBar[0];
-        const midiNotes = chordToMidiNotes(chord.key, chord.extension, chord.bassInversion, chord.isForeignBass);
-        const noteNames = midiNotes.map(midi => this.midiToFrequency(midi));
-
-        this.scheduledNotes.push({
-          notes: noteNames,
-          startTime: barIndex * beatsPerBar * secondsPerBeat,
-          duration: beatsPerBar * secondsPerBeat,
-          barIndex
-        });
-      } else if (config.chordCount === 2) {
-        const firstChord = chordsInBar.find(c => c.position === 1);
-        const secondChord = chordsInBar.find(c => c.position === 2);
-
-        if (firstChord) {
-          const midiNotes = chordToMidiNotes(firstChord.key, firstChord.extension, firstChord.bassInversion, firstChord.isForeignBass);
-          const noteNames = midiNotes.map(midi => this.midiToFrequency(midi));
-
-          this.scheduledNotes.push({
-            notes: noteNames,
-            startTime: barIndex * beatsPerBar * secondsPerBeat,
-            duration: (beatsPerBar / 2) * secondsPerBeat,
-            barIndex,
-            position: 1
-          });
-        }
-
-        if (secondChord) {
-          const midiNotes = chordToMidiNotes(secondChord.key, secondChord.extension, secondChord.bassInversion, secondChord.isForeignBass);
-          const noteNames = midiNotes.map(midi => this.midiToFrequency(midi));
-
-          this.scheduledNotes.push({
-            notes: noteNames,
-            startTime: (barIndex * beatsPerBar + beatsPerBar / 2) * secondsPerBeat,
-            duration: (beatsPerBar / 2) * secondsPerBeat,
-            barIndex,
-            position: 2
-          });
-        }
-      }
+    buildPlaybackEvents(measures, beatsPerBar).forEach((event) => {
+      const midiNotes = chordToMidiNotes(
+        event.chord.key,
+        event.chord.extension,
+        event.chord.bassInversion,
+        event.chord.isForeignBass
+      );
+      this.scheduledNotes.push({
+        notes: midiNotes.map((midi) => this.midiToFrequency(midi)),
+        startTime: event.startBeat * secondsPerBeat,
+        duration: event.durationBeats * secondsPerBeat,
+        barIndex: event.barIndex,
+        position: event.position
+      });
     });
   }
 
   private playbackLoop = (timestamp: number) => {
     if (!this.isPlaying) return;
 
-    const currentTime = (timestamp - this.startTimestamp) / 1000;
+    let currentTime = (timestamp - this.startTimestamp) / 1000;
+
+    if (currentTime >= this.totalDuration) {
+      if (!this.loopEnabled) {
+        this.stop();
+        this.onBeat?.(-1);
+        return;
+      }
+      this.stopAllNotes();
+      this.activeNoteIds = [];
+      this.startTimestamp = timestamp;
+      currentTime = 0;
+      this.lastReportedBar = -1;
+    }
+
+    const barDuration = this.totalDuration / 8;
+    const currentBar = Math.min(7, Math.floor(currentTime / barDuration));
+    if (currentBar !== this.lastReportedBar) {
+      this.lastReportedBar = currentBar;
+      this.onBeat?.(currentBar);
+    }
 
     this.scheduledNotes.forEach((note, index) => {
       const noteEndTime = note.startTime + note.duration;
@@ -152,18 +149,20 @@ export class AudioEngine {
   async play() {
     await this.initialize();
     this.isPlaying = true;
-    this.startTimestamp = performance.now();
+    this.startTimestamp = performance.now() - this.pausedAt * 1000;
     this.stopAllNotes();
     this.activeNoteIds = [];
     this.animationFrameId = requestAnimationFrame(this.playbackLoop);
   }
 
   pause() {
+    this.pausedAt = (performance.now() - this.startTimestamp) / 1000;
     this.isPlaying = false;
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
     }
+    this.stopAllNotes();
   }
 
   stop() {
@@ -173,6 +172,13 @@ export class AudioEngine {
       this.animationFrameId = null;
     }
     this.stopAllNotes();
+    this.pausedAt = 0;
+    this.lastReportedBar = -1;
+  }
+
+  rewind() {
+    this.stop();
+    this.onBeat?.(-1);
   }
 
   setTempo(_bpm: number) {
@@ -181,7 +187,8 @@ export class AudioEngine {
   }
 
   getPlaybackState(): 'started' | 'paused' | 'stopped' {
-    return this.isPlaying ? 'started' : 'stopped';
+    if (this.isPlaying) return 'started';
+    return this.pausedAt > 0 ? 'paused' : 'stopped';
   }
 
   dispose() {
