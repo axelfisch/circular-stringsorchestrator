@@ -21,12 +21,12 @@ export interface HarmonicFunction {
 }
 
 export class AiXELEngine {
-  private harmonicDictionary: any;
-  private profile: any;
+  private readonly harmonicDictionary: Record<string, Record<string, string[]>>;
+  private readonly profile: typeof aixelMasterModel.datasets.aixel_full_profile_v1;
 
   constructor() {
-    this.harmonicDictionary = aixelMasterModel.harmony_dictionary;
-    this.profile = aixelMasterModel.profile;
+    this.harmonicDictionary = aixelMasterModel.datasets.full_jazz_chords_clean;
+    this.profile = aixelMasterModel.datasets.aixel_full_profile_v1;
   }
 
   // Get all available chord types for a given key
@@ -45,9 +45,9 @@ export class AiXELEngine {
 
   // Get ECM-style voicing recommendations
   getECMVoicing(key: string, extension: string): string[] {
-    // Map extension to chord type
-    const chordType = this.mapExtensionToChordType(extension);
-    return this.getVoicing(key, chordType);
+    // Chord names are stored as C-based templates inside each transposed key bucket.
+    const chordTemplate = this.mapExtensionToChordType(extension);
+    return this.getVoicing(key, chordTemplate);
   }
 
   // Map user-friendly extension to dictionary chord type
@@ -105,17 +105,18 @@ export class AiXELEngine {
   }
 
   // Get harmonic progression suggestions based on AiXEL rules
-  suggestProgression(key: string, bars: number = 8): string[] {
-    const recipes = this.profile.harmonic_language.progression_recipes || [];
+  suggestProgression(_key: string, bars: number = 8): string[] {
+    const recipes = this.profile.progression_recipes || [];
     if (recipes.length === 0) return [];
 
     // Pick a random recipe
     const recipe = recipes[Math.floor(Math.random() * recipes.length)];
-    return recipe;
+    return recipe.slice(0, bars);
   }
 
   // Get scale for improvisation based on chord
   getScale(key: string, extension: string): string {
+    void key;
     const scaleMapping = this.profile.scale_mapping || {};
 
     // Try to match extension pattern
@@ -147,7 +148,9 @@ export class AiXELEngine {
   }
 
   // Get bass movement suggestions
-  getBassMovement(fromKey: string, toKey: string): string {
+  getBassMovement(_fromKey: string, _toKey: string): string {
+    void _fromKey;
+    void _toKey;
     const guidelines = this.profile.bass_cello_guidelines?.bass || '';
     return guidelines;
   }

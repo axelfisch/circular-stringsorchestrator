@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import chordData from '../data/AiXEL_20Chords_in12Keys.json';
+import { toCanvasPoint } from '../utils/canvasCoordinates';
 
 interface CircularSelectorProps {
   onSelectionChange: (key: string, extension: string, bassInversion?: string, isForeignBass?: boolean) => void;
@@ -24,6 +25,12 @@ const bassInversions = [
 ];
 
 const foreignBassNotes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+
+type BassOption = string | { label: string; interval: string };
+
+function getBassOptionLabel(option: BassOption): string {
+  return typeof option === 'string' ? option : option.label;
+}
 
 const musicStyles = [
   'Bossa Nova',
@@ -213,7 +220,7 @@ export default function CircularSelector({ onSelectionChange, onStyleChange }: C
     bassOptions.forEach((option, index) => {
       const startAngle = (index / bassOptions.length) * 2 * Math.PI - Math.PI / 2 + bassRotation;
       const endAngle = ((index + 1) / bassOptions.length) * 2 * Math.PI - Math.PI / 2 + bassRotation;
-      const label = isForeignBass ? option : (option as {label: string, interval: string}).label;
+      const label = getBassOptionLabel(option);
       const isSelected = selectedBassInversion === label;
 
       ctx.beginPath();
@@ -287,8 +294,13 @@ export default function CircularSelector({ onSelectionChange, onStyleChange }: C
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const { x, y } = toCanvasPoint(
+      event.clientX,
+      event.clientY,
+      rect,
+      canvas.width,
+      canvas.height
+    );
 
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
@@ -303,7 +315,6 @@ export default function CircularSelector({ onSelectionChange, onStyleChange }: C
     const outerRadius = 320;
     const keyRadius = 270;
     const extensionRadius = 180;
-    const bassInversionRadius = 145;
     const centerRadius = 120;
 
     // Check if click is in style ring (outermost)
@@ -449,8 +460,10 @@ export default function CircularSelector({ onSelectionChange, onStyleChange }: C
         <div className="flex items-center gap-2 bg-[#0F172A] rounded-lg p-2 border border-[#1E293B] fade-in">
           <button
             onClick={() => {
-              setIsForeignBass(!isForeignBass);
+              const nextIsForeignBass = !isForeignBass;
+              setIsForeignBass(nextIsForeignBass);
               setSelectedBassInversion('');
+              onSelectionChange(selectedKey, selectedExtension, '', nextIsForeignBass);
             }}
             className={`px-3 py-1 rounded transition-all hover:scale-105 active:scale-95 font-semibold text-xs ${
               isForeignBass

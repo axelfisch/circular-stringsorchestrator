@@ -11,17 +11,6 @@ import orchestrationRules from '../data/AiXEL_StringsOrchestrationRules.json';
 // Centre des voicings = 3e & 7e ; Extensions (9/#11/13) en couronne (aigus)
 // ============================================================================
 
-// Interval semitones from root
-const INTERVALS = {
-  'R': 0, '1': 0,
-  'b2': 1, '2': 2, '9': 14, 'b9': 13, '#9': 15,
-  'b3': 3, '3': 4,
-  '4': 5, '11': 17, '#11': 18,
-  'b5': 6, '5': 7, '#5': 8, '5+': 8,
-  'b6': 8, '6': 9, '13': 21, 'b13': 20,
-  'b7': 10, '7': 11, 'maj7': 11, '7+': 11
-};
-
 // Voicing blueprints from AiXEL profile
 // Order: from bass to soprano (how notes should be stacked)
 const VOICING_BLUEPRINTS: Record<string, { intervals: number[], description: string }> = {
@@ -263,7 +252,6 @@ export class StringsEngine {
   private compressor: Tone.Compressor | null = null;
   private limiter: Tone.Limiter | null = null;
   private initialized = false;
-  private isPlaying = false;
   private scheduledEvents: number[] = [];
   private lastVoicing: OrchestratedVoice[] = [];
 
@@ -419,7 +407,7 @@ export class StringsEngine {
     const voicingNotes = analysis.blueprint.map(interval => analysis.root + interval);
     
     // Ensure we have enough notes for 6 voices
-    const expandedNotes = this.expandVoicing(voicingNotes, analysis.root);
+    const expandedNotes = this.expandVoicing(voicingNotes);
 
     // Distribute according to AiXEL rules:
     // - Contrabass: Root (1-2 octaves down)
@@ -430,7 +418,10 @@ export class StringsEngine {
     // - Violin1: Highest tension (#11, 13) or melody
 
     // 1. CONTRABASS - Deep foundation
-    const bassNote = this.fitToRange(analysis.root - 24, 'Contrabass');
+    const inputBass = midiNotes.length > 0 ? Math.min(...midiNotes) : analysis.root;
+    const hasAlternateBass = inputBass % 12 !== analysis.root % 12;
+    const bassFoundation = hasAlternateBass ? inputBass - 12 : analysis.root - 24;
+    const bassNote = this.fitToRange(bassFoundation, 'Contrabass');
     voices.push({
       voice: 'Contrabass',
       midiNote: bassNote,
@@ -517,7 +508,7 @@ export class StringsEngine {
     };
   }
 
-  private expandVoicing(notes: number[], root: number): number[] {
+  private expandVoicing(notes: number[]): number[] {
     const expanded = [...notes];
     
     // Ensure we have at least 6 distinct pitch classes
@@ -704,7 +695,6 @@ export class StringsEngine {
   }
 
   stop(): void {
-    this.isPlaying = false;
     this.releaseAll();
     
     this.scheduledEvents.forEach(id => {

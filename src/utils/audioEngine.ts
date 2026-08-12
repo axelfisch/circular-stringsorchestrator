@@ -65,9 +65,11 @@ export class AudioEngine {
     sequence: ChordInSequence[],
     barConfigs: BarConfig[],
     tempo: number,
-    loop: boolean,
-    onBeat?: (barIndex: number) => void
+    _loop: boolean,
+    _onBeat?: (barIndex: number) => void
   ) {
+    void _loop;
+    void _onBeat;
     this.scheduledNotes = [];
     const beatsPerBar = 4;
     const secondsPerBeat = 60 / tempo;
@@ -173,7 +175,8 @@ export class AudioEngine {
     this.stopAllNotes();
   }
 
-  setTempo(bpm: number) {
+  setTempo(_bpm: number) {
+    void _bpm;
     // Re-schedule with new tempo if needed
   }
 
