@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Play, Square, SkipBack, Download, Split } from 'lucide-react';
 import { AudioEngine } from '../utils/audioEngine';
 import { downloadMidiFile } from '../utils/midiExport';
+import { downloadMusicXmlFile } from '../utils/musicXmlExport';
 import { countSequenceChords, SequenceMeasure } from '../utils/sequencerModel';
 
 interface ChordSequencerProps {
@@ -108,6 +109,11 @@ export default function ChordSequencer({ timeSignature, measures, selectedStyle,
   const handleMidiExport = () => {
     if (chordCount === 0) return;
     downloadMidiFile(measures, tempo);
+  };
+
+  const handleMusicXmlExport = () => {
+    if (chordCount === 0) return;
+    downloadMusicXmlFile(measures, tempo);
   };
   return (
     <div className="space-y-4 w-full">
@@ -335,7 +341,11 @@ export default function ChordSequencer({ timeSignature, measures, selectedStyle,
               <Download className="w-3 h-3" />
               MIDI
             </button>
-            <button className="px-3 py-1.5 rounded-full font-semibold text-xs bg-transparent border border-[#8B5CF6] text-[#8B5CF6] hover:bg-[#8B5CF6] hover:text-white transition-all flex items-center gap-1.5">
+            <button
+              onClick={handleMusicXmlExport}
+              disabled={chordCount === 0}
+              className="px-3 py-1.5 rounded-full font-semibold text-xs bg-transparent border border-[#8B5CF6] text-[#8B5CF6] hover:bg-[#8B5CF6] hover:text-white transition-all flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#8B5CF6]"
+            >
               <Download className="w-3 h-3" />
               XML
             </button>
