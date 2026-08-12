@@ -144,7 +144,7 @@ User request: ${gptPrompt}
       if (onGPTResponse) {
         onGPTResponse(fullPrompt);
       }
-    } catch (error) {
+    } catch {
       setGptResponse('Error: Could not connect to GPT. Please try the direct link.');
     } finally {
       setIsLoadingGPT(false);
@@ -197,7 +197,7 @@ User request: ${gptPrompt}
 
       {/* Voice Distribution */}
       <div className="space-y-2 mb-4">
-        {sortedVoices.map((voice, index) => (
+        {sortedVoices.map((voice) => (
           <div
             key={voice.voice}
             className="voice-entry flex items-center gap-3 p-2 rounded-lg bg-[#1E293B]/50 hover:bg-[#1E293B] transition-all"

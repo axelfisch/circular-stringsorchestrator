@@ -27,14 +27,10 @@ function tryAiXELVoicing(key: string, extension: string): number[] | null {
         return 60; // fallback
       });
     }
-  } catch (e) {
+  } catch {
     // Fall back to algorithmic voicing
   }
   return null;
-}
-
-interface ChordVoicing {
-  notes: number[];
 }
 
 const intervals: Record<string, number> = {

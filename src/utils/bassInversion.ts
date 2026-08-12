@@ -15,7 +15,7 @@ const intervals: Record<string, number> = {
 
 const notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 
-export function calculateBassNote(key: string, inversionLabel: string, inversionInterval: string): string {
+export function calculateBassNote(key: string, inversionInterval: string): string {
   const keyIndex = notes.indexOf(key);
   if (keyIndex === -1) return key;
 
@@ -30,7 +30,7 @@ export function buildFullChord(key: string, extension: string, bassInversion?: s
   let chord = key + extension;
 
   if (bassInversion && bassInterval) {
-    const bassNote = calculateBassNote(key, bassInversion, bassInterval);
+    const bassNote = calculateBassNote(key, bassInterval);
     chord += `/${bassNote}`;
   }
 
