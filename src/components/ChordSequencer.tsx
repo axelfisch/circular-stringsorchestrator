@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Square, SkipBack, Download, Split } from 'lucide-react';
 import { AudioEngine } from '../utils/audioEngine';
+import { downloadMidiFile } from '../utils/midiExport';
 import { countSequenceChords, SequenceMeasure } from '../utils/sequencerModel';
 
 interface ChordSequencerProps {
@@ -102,6 +103,11 @@ export default function ChordSequencer({ timeSignature, measures, selectedStyle,
     audioEngineRef.current.rewind();
     setIsPlaying(false);
     setCurrentBar(-1);
+  };
+
+  const handleMidiExport = () => {
+    if (chordCount === 0) return;
+    downloadMidiFile(measures, tempo);
   };
   return (
     <div className="space-y-4 w-full">
@@ -321,7 +327,11 @@ export default function ChordSequencer({ timeSignature, measures, selectedStyle,
             >
               LOOP
             </button>
-            <button className="px-3 py-1.5 rounded-full font-semibold text-xs bg-transparent border border-[#0EA5E9] text-[#0EA5E9] hover:bg-[#0EA5E9] hover:text-white transition-all flex items-center gap-1.5">
+            <button
+              onClick={handleMidiExport}
+              disabled={chordCount === 0}
+              className="px-3 py-1.5 rounded-full font-semibold text-xs bg-transparent border border-[#0EA5E9] text-[#0EA5E9] hover:bg-[#0EA5E9] hover:text-white transition-all flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#0EA5E9]"
+            >
               <Download className="w-3 h-3" />
               MIDI
             </button>
