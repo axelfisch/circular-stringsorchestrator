@@ -26,6 +26,19 @@ describe('StringsEngine harmonic foundation', () => {
     expect(bass!.midiNote % 12).toBe(4);
   });
 
+  it('parses slash chords without losing their harmonic quality', () => {
+    const engine = new StringsEngine();
+    expect(engine.analyzeChordSymbol('Am/C').quality).toBe('min');
+    expect(engine.analyzeChordSymbol('D/F#').quality).toBe('maj');
+    expect(engine.analyzeChordSymbol('Cmaj7(#11)/D').quality).toBe('maj7(11+)');
+  });
+
+  it('supports the dominant flat-five color used in Doux Baiser', () => {
+    const result = new StringsEngine().orchestrateChord([40], 'E7(b5)');
+    expect(result.voicingType).toBe('7(b5)');
+    expect(result.voices.some((voice) => voice.intervalName === '#11')).toBe(true);
+  });
+
   it('keeps all six roles ordered inside the corpus-derived register corridor', () => {
     const result = new StringsEngine().orchestrateChord([48, 52, 55, 59, 62], 'Cmaj9');
     const notes = result.voices.map((voice) => voice.midiNote);

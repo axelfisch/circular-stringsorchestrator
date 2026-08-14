@@ -98,6 +98,10 @@ const VOICING_BLUEPRINTS: Record<string, { intervals: number[], description: str
     intervals: [0, 10, 4, 7], // R, b7, 3, 5
     description: 'Dom7 basic - 3&b7 center'
   },
+  '7(b5)': {
+    intervals: [0, 10, 4, 6], // R, b7, 3, b5
+    description: 'Dominant 7 flat 5'
+  },
   '9': { 
     intervals: [0, 10, 4, 14], // R, b7, 3, 9
     description: 'Dom9 - 9 soprano'
@@ -343,7 +347,7 @@ export class StringsEngine {
     const root = noteToMidi[rootName] || 60;
 
     // Extract quality/extension
-    const extension = symbol.replace(/^[A-G][b#]?/, '').toLowerCase();
+    const extension = symbol.replace(/^[A-G][b#]?/, '').split('/')[0].toLowerCase();
     
     // Find matching blueprint
     const blueprintKey = this.findBlueprintKey(extension);
@@ -389,6 +393,7 @@ export class StringsEngine {
     // Dominant variants
     if (ext.includes('13(b9)')) return '13(b9)';
     if (ext.includes('13(b5)')) return '13(b5)';
+    if (ext.includes('7(b5)') || ext.includes('7b5')) return '7(b5)';
     if (ext.includes('7(9+5+)') || ext.includes('7alt') || ext.includes('7#9#5')) return '7(9+5+)';
     if (ext.includes('7(11+,13)') || ext.includes('7(#11,13)')) return '7(11+,13)';
     if (ext.includes('7(b9)') || ext.includes('7b9')) return '7(b9)';

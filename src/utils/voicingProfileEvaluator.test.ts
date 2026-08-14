@@ -3,12 +3,13 @@ import { VOICING_EVALUATION_PROFILES } from '../data/voicingEvaluationProfiles';
 import { evaluateAllProfiles, evaluateProfile } from './voicingProfileEvaluator';
 
 describe('Axel Fisch multi-profile evaluator', () => {
-  it('defines reproducible Reference, Lyrical, Kinetic and Modal profiles', () => {
+  it('defines reproducible synthetic and real-composition profiles', () => {
     expect(VOICING_EVALUATION_PROFILES.map((profile) => profile.id)).toEqual([
       'reference',
       'lyrical',
       'kinetic',
       'modal',
+      'doux-baiser',
     ]);
     expect(VOICING_EVALUATION_PROFILES.every((profile) => profile.progression.length >= 5)).toBe(true);
   });
@@ -25,12 +26,22 @@ describe('Axel Fisch multi-profile evaluator', () => {
     expect(evaluation.passesProfileFloor).toBe(true);
     expect(evaluation.passesAggregateFloor).toBe(true);
     expect(evaluation.passes).toBe(true);
-    expect(evaluation.profiles).toHaveLength(4);
+    expect(evaluation.profiles).toHaveLength(5);
+  });
+
+  it('preserves the complete 24-measure Doux Baiser source form', () => {
+    const profile = VOICING_EVALUATION_PROFILES.find((item) => item.id === 'doux-baiser')!;
+    expect(profile.source?.composer).toBe('Axel Fisch');
+    expect(profile.source?.tempoBpm).toBe(65);
+    expect(profile.progression).toHaveLength(48);
+    expect(profile.progression[profile.progression.length - 1]).toMatchObject({ measure: 24, symbol: 'D/A', beats: 4 });
+    expect(profile.progression.find((event) => event.measure === 19)).toMatchObject({ beats: 2 });
   });
 
   it('detects a raised aggregate threshold without changing the measured result', () => {
     const evaluation = evaluateAllProfiles(VOICING_EVALUATION_PROFILES, 90.4, 85, 95);
-    expect(evaluation.aggregateScore).toBeGreaterThanOrEqual(90);
+    expect(evaluation.aggregateScore).toBeGreaterThanOrEqual(88);
+    expect(evaluation.aggregateScore).toBeLessThan(95);
     expect(evaluation.passesAggregateFloor).toBe(false);
     expect(evaluation.passes).toBe(false);
   });
