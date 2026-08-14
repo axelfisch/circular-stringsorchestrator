@@ -6,9 +6,10 @@ import {
 } from '../../../src/utils/aixelAssistantContract';
 
 export const AIXEL_ASSISTANT_MAX_BODY_BYTES = 64 * 1024;
+export const AIXEL_ASSISTANT_SERVER_TIMEOUT_MS = 18_000;
 
 export interface AiXELAssistantModel {
-  generate(request: AiXELAssistantRequest): Promise<unknown>;
+  generate(request: AiXELAssistantRequest, signal: AbortSignal): Promise<unknown>;
 }
 
 interface ErrorPayload {
@@ -92,10 +93,17 @@ export async function handleAiXELAssistantRequest(
   }
 
   let candidate: unknown;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), AIXEL_ASSISTANT_SERVER_TIMEOUT_MS);
   try {
-    candidate = await model.generate(requestValidation.data);
+    candidate = await model.generate(requestValidation.data, controller.signal);
   } catch {
+    if (controller.signal.aborted) {
+      return errorResponse(504, 'ASSISTANT_TIMEOUT', 'AiXEL Assistant took too long to respond.');
+    }
     return errorResponse(503, 'ASSISTANT_UNAVAILABLE', 'AiXEL Assistant is temporarily unavailable.');
+  } finally {
+    clearTimeout(timeout);
   }
 
   const responseValidation = validateAiXELAssistantResponse(candidate);

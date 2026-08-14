@@ -7,6 +7,7 @@ import {
 } from '../../../src/utils/aixelAssistantContract';
 import {
   AIXEL_ASSISTANT_MAX_BODY_BYTES,
+  AIXEL_ASSISTANT_SERVER_TIMEOUT_MS,
   AiXELAssistantModel,
   handleAiXELAssistantRequest
 } from './aixelAssistantService';
@@ -132,5 +133,23 @@ describe('AiXEL Assistant Netlify Function service', () => {
 
     expect(response.status).toBe(503);
     expect(body).not.toContain('secret provider detail');
+  });
+
+  it('aborts slow inference at the server boundary', async () => {
+    vi.useFakeTimers();
+    const model: AiXELAssistantModel = {
+      generate: vi.fn((_request, signal) => new Promise((_resolve, reject) => {
+        signal.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')), { once: true });
+      }))
+    };
+
+    const pendingResponse = handleAiXELAssistantRequest(postRequest(validRequest()), model);
+    await vi.advanceTimersByTimeAsync(AIXEL_ASSISTANT_SERVER_TIMEOUT_MS);
+    const response = await pendingResponse;
+
+    expect(response.status).toBe(504);
+    expect(await response.json()).toMatchObject({ error: { code: 'ASSISTANT_TIMEOUT' } });
+    expect(model.generate).toHaveBeenCalledWith(expect.any(Object), expect.any(AbortSignal));
+    vi.useRealTimers();
   });
 });

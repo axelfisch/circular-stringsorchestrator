@@ -37,6 +37,14 @@ export class AiXELAssistantClientError extends Error {
   }
 }
 
+export const AIXEL_ASSISTANT_CLIENT_TIMEOUT_MS = 22_000;
+
+export interface AiXELAssistantRequestOptions {
+  fetcher?: typeof fetch;
+  signal?: AbortSignal;
+  timeoutMs?: number;
+}
+
 export function buildAiXELAssistantRequest(input: AiXELAssistantContextInput): AiXELAssistantRequest {
   const request: AiXELAssistantRequest = {
     version: AIXEL_ASSISTANT_CONTRACT_VERSION,
@@ -64,17 +72,44 @@ export function buildAiXELAssistantRequest(input: AiXELAssistantContextInput): A
 
 export async function requestAiXELAssistant(
   request: AiXELAssistantRequest,
-  fetcher: typeof fetch = fetch
+  optionsOrFetcher: AiXELAssistantRequestOptions | typeof fetch = {}
 ): Promise<AiXELAssistantResponse> {
+  const options = typeof optionsOrFetcher === 'function'
+    ? { fetcher: optionsOrFetcher }
+    : optionsOrFetcher;
+  const fetcher = options.fetcher ?? fetch;
+  const controller = new AbortController();
+  const timeoutMs = options.timeoutMs ?? AIXEL_ASSISTANT_CLIENT_TIMEOUT_MS;
+  let didTimeout = false;
+  const abortFromCaller = () => controller.abort(options.signal?.reason);
+
+  if (options.signal?.aborted) abortFromCaller();
+  else options.signal?.addEventListener('abort', abortFromCaller, { once: true });
+
+  const timeout = setTimeout(() => {
+    didTimeout = true;
+    controller.abort();
+  }, timeoutMs);
+
   let response: Response;
   try {
     response = await fetcher('/api/aixel-assistant', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
+      signal: controller.signal
     });
   } catch {
+    if (didTimeout) {
+      throw new AiXELAssistantClientError('REQUEST_TIMEOUT', 'AiXEL Assistant took too long to respond. Please try again.');
+    }
+    if (controller.signal.aborted) {
+      throw new AiXELAssistantClientError('REQUEST_ABORTED', 'AiXEL Assistant request was cancelled.');
+    }
     throw new AiXELAssistantClientError('NETWORK_ERROR', 'AiXEL Assistant could not be reached.');
+  } finally {
+    clearTimeout(timeout);
+    options.signal?.removeEventListener('abort', abortFromCaller);
   }
 
   let payload: unknown;
