@@ -60,6 +60,17 @@ describe('StringsEngine harmonic foundation', () => {
       voices: engine.orchestrateChord(notes, symbol).voices,
     }));
 
-    expect(evaluateSequence(frames).totalScore).toBeGreaterThanOrEqual(75);
+    const evaluation = evaluateSequence(frames);
+    expect(evaluation.totalScore).toBeGreaterThanOrEqual(88);
+    expect(evaluation.metrics.find((metric) => metric.id === 'parallel-perfects')?.score).toBe(100);
+  });
+
+  it('assigns the characteristic available extension to the Crown', () => {
+    const engine = new StringsEngine();
+    const majorNine = engine.orchestrateChord([48, 52, 55, 59, 62], 'Cmaj9');
+    const dominantThirteen = engine.orchestrateChord([43, 47, 50, 53, 57, 64], 'G13');
+
+    expect(majorNine.voices.find((voice) => voice.voice === 'Violin1')?.intervalName).toBe('9');
+    expect(dominantThirteen.voices.find((voice) => voice.voice === 'Violin1')?.intervalName).toBe('13');
   });
 });

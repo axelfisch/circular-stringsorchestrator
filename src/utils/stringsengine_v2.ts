@@ -252,6 +252,18 @@ export interface ChordAnalysis {
   description: string;
 }
 
+interface VoiceLeadingCandidate {
+  midiNote: number;
+  intervalName: string;
+  pitchClass: number;
+  roleCost: number;
+}
+
+interface VoiceLeadingState {
+  selected: VoiceLeadingCandidate[];
+  cost: number;
+}
+
 export class StringsEngine {
   private synths: Map<VoiceName, Tone.PolySynth> = new Map();
   private reverb: Tone.Reverb | null = null;
@@ -501,7 +513,7 @@ export class StringsEngine {
     });
 
     // Apply voice leading rules
-    this.applyVoiceLeading(voices);
+    this.applyVoiceLeading(voices, analysis);
 
     // Store for voice leading continuity
     this.lastVoicing = [...voices];
@@ -562,60 +574,117 @@ export class StringsEngine {
   // VOICE LEADING - Smooth transitions between chords
   // ============================================================================
 
-  private applyVoiceLeading(voices: OrchestratedVoice[]): void {
+  private applyVoiceLeading(voices: OrchestratedVoice[], analysis: ChordAnalysis): void {
     const byVoice = new Map(voices.map((voice) => [voice.voice, voice]));
     const ordered = VOICE_LEADING_ORDER.map((voiceName) => byVoice.get(voiceName)).filter(
       (voice): voice is OrchestratedVoice => Boolean(voice)
     );
     if (ordered.length !== VOICE_LEADING_ORDER.length) return;
 
-    const candidates = ordered.map((voice) => this.octaveCandidates(voice));
-    let bestNotes: number[] | null = null;
-    let bestCost = Number.POSITIVE_INFINITY;
+    const candidates = ordered.map((voice) => this.roleCandidates(voice, analysis));
+    let states: VoiceLeadingState[] = [{ selected: [], cost: 0 }];
 
-    const visit = (index: number, selected: number[], cost: number): void => {
-      if (cost >= bestCost) return;
-      if (index === ordered.length) {
-        const span = selected[selected.length - 1] - selected[0];
-        const totalCost = cost + Math.abs(span - chamberStringsDna.ensemble.targetVerticalSpanSemitones) * 1.6;
-        if (totalCost < bestCost) {
-          bestCost = totalCost;
-          bestNotes = [...selected];
-        }
-        return;
-      }
-
-      const voice = ordered[index];
-      for (const note of candidates[index]) {
-        let candidateCost = cost + this.roleRegisterCost(voice.voice, note) + this.motionCost(voice.voice, note);
-        if (index > 0) {
-          const lowerNote = selected[index - 1];
-          const gap = note - lowerNote;
-          if (gap <= 0 || gap > 18) continue;
-          candidateCost += this.spacingCost(gap);
-          candidateCost += this.parallelPerfectCost(ordered[index - 1].voice, voice.voice, lowerNote, note);
-        }
-        visit(index + 1, [...selected, note], candidateCost);
-      }
-    };
-
-    visit(0, [], 0);
-    if (!bestNotes) return;
-    const optimizedNotes: number[] = bestNotes;
     ordered.forEach((voice, index) => {
-      voice.midiNote = optimizedNotes[index];
-      voice.noteName = this.midiToNote(optimizedNotes[index]);
+      const expandedStates: VoiceLeadingState[] = [];
+      states.forEach((state) => {
+        candidates[index].forEach((candidate) => {
+          let candidateCost = state.cost + candidate.roleCost;
+          candidateCost += this.roleRegisterCost(voice.voice, candidate.midiNote);
+          candidateCost += this.motionCost(voice.voice, candidate.midiNote);
+          if (index > 0) {
+            const lower = state.selected[index - 1];
+            const gap = candidate.midiNote - lower.midiNote;
+            if (gap <= 0 || gap > 18) return;
+            candidateCost += this.spacingCost(gap);
+            candidateCost += this.parallelPerfectCost(
+              ordered[index - 1].voice,
+              voice.voice,
+              lower.midiNote,
+              candidate.midiNote
+            );
+            if (lower.pitchClass === candidate.pitchClass) candidateCost += 18;
+          }
+          if (state.selected.some((selected) => selected.pitchClass === candidate.pitchClass)) candidateCost += 3;
+          expandedStates.push({ selected: [...state.selected, candidate], cost: candidateCost });
+        });
+      });
+      states = expandedStates.sort((first, second) => first.cost - second.cost).slice(0, 180);
+    });
+
+    const best = states
+      .map((state) => ({
+        ...state,
+        cost: state.cost + Math.abs(
+          state.selected[state.selected.length - 1].midiNote -
+          state.selected[0].midiNote -
+          chamberStringsDna.ensemble.targetVerticalSpanSemitones
+        ) * 1.6,
+      }))
+      .sort((first, second) => first.cost - second.cost)[0];
+    if (!best) return;
+    ordered.forEach((voice, index) => {
+      const candidate = best.selected[index];
+      voice.midiNote = candidate.midiNote;
+      voice.noteName = this.midiToNote(candidate.midiNote);
+      voice.intervalName = candidate.intervalName;
     });
   }
 
-  private octaveCandidates(voice: OrchestratedVoice): number[] {
+  private roleCandidates(voice: OrchestratedVoice, analysis: ChordAnalysis): VoiceLeadingCandidate[] {
     const range = VOICE_RANGES[voice.voice];
-    const pitchClass = ((voice.midiNote % 12) + 12) % 12;
-    const notes: number[] = [];
-    for (let midi = range.min; midi <= range.max; midi += 1) {
-      if (midi % 12 === pitchClass) notes.push(midi);
+    const originalPitchClass = ((voice.midiNote % 12) + 12) % 12;
+    const availableIntervals = voice.voice === 'Contrabass'
+      ? [((originalPitchClass - analysis.root) % 12 + 12) % 12]
+      : [...new Set(analysis.blueprint.map((interval) => ((interval % 12) + 12) % 12))];
+
+    return availableIntervals
+      .flatMap((interval) => {
+        const pitchClass = ((analysis.root + interval) % 12 + 12) % 12;
+        const roleCost = this.harmonicRoleCost(voice.voice, interval) * 5;
+        const notes: VoiceLeadingCandidate[] = [];
+        for (let midi = range.min; midi <= range.max; midi += 1) {
+          if (midi % 12 === pitchClass) {
+            notes.push({ midiNote: midi, intervalName: this.getIntervalName(interval), pitchClass, roleCost });
+          }
+        }
+        return notes
+          .sort((first, second) => (
+            this.roleRegisterCost(voice.voice, first.midiNote) + this.motionCost(voice.voice, first.midiNote)
+          ) - (
+            this.roleRegisterCost(voice.voice, second.midiNote) + this.motionCost(voice.voice, second.midiNote)
+          ))
+          .slice(0, 3);
+      });
+  }
+
+  private harmonicRoleCost(voiceName: VoiceName, interval: number): number {
+    const normalized = ((interval % 12) + 12) % 12;
+    if (voiceName === 'Contrabass') return 0;
+    if (voiceName === 'Cello') {
+      if (normalized === 0) return 0;
+      if (normalized === 7) return 0.5;
+      if ([3, 4].includes(normalized)) return 1.2;
+      if ([10, 11].includes(normalized)) return 2.5;
+      return 4;
     }
-    return notes;
+    if (voiceName === 'Viola1' || voiceName === 'Viola2') {
+      if ([3, 4, 10, 11].includes(normalized)) return 0;
+      if (normalized === 7) return 2.5;
+      if (normalized === 0) return 3.5;
+      return 4;
+    }
+    if (voiceName === 'Violin2') {
+      if ([2, 5, 6, 9].includes(normalized)) return 0;
+      if ([10, 11].includes(normalized)) return 1;
+      if (normalized === 7) return 3;
+      if ([3, 4].includes(normalized)) return 4;
+      return 5;
+    }
+    if ([6, 9, 5, 2].includes(normalized)) return 0;
+    if ([10, 11].includes(normalized)) return 1.5;
+    if (normalized === 7) return 4;
+    if ([3, 4].includes(normalized)) return 5;
+    return 6;
   }
 
   private roleRegisterCost(voiceName: VoiceName, note: number): number {
