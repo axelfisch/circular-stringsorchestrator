@@ -19,5 +19,9 @@ console.log(JSON.stringify({
   evaluator: 'Axel Fisch Voicing Evaluator V1',
   profile: 'Axel Fisch Chamber Strings DNA V1',
   progression: progression.map((item) => item.symbol),
+  frames: frames.map((frame) => ({
+    label: frame.label,
+    voices: frame.voices.map((voice) => ({ voice: voice.voice, midiNote: voice.midiNote, interval: voice.intervalName })),
+  })),
   result: evaluateSequence(frames),
 }, null, 2));

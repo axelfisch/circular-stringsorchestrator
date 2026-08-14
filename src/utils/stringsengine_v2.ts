@@ -5,6 +5,7 @@
 
 import * as Tone from 'tone';
 import orchestrationRules from '../data/AiXEL_StringsOrchestrationRules.json';
+import chamberStringsDna from '../data/AxelFisch_ChamberStrings_DNA_V1.json';
 
 // ============================================================================
 // AIXEL VOICING BLUEPRINTS - From AIXEL_MASTER_MODEL_2025_FULL
@@ -222,6 +223,11 @@ const STRING_SYNTH_CONFIG = {
 };
 
 type VoiceName = keyof typeof VOICE_RANGES;
+
+const VOICE_LEADING_ORDER: VoiceName[] = ['Contrabass', 'Cello', 'Viola2', 'Viola1', 'Violin2', 'Violin1'];
+const DNA_ROLE_BY_VOICE = Object.fromEntries(
+  chamberStringsDna.voiceRoles.map((role) => [role.voice, role])
+);
 
 export interface OrchestratedVoice {
   voice: VoiceName;
@@ -557,55 +563,96 @@ export class StringsEngine {
   // ============================================================================
 
   private applyVoiceLeading(voices: OrchestratedVoice[]): void {
-    // Sort by expected register
-    const voiceOrder: VoiceName[] = ['Contrabass', 'Cello', 'Viola2', 'Viola1', 'Violin2', 'Violin1'];
-    
-    // Ensure minimum spacing (minor 3rd = 3 semitones) in harmony voices
-    for (let i = 2; i < voices.length - 1; i++) {
-      const lower = voices.find(v => v.voice === voiceOrder[i]);
-      const upper = voices.find(v => v.voice === voiceOrder[i + 1]);
-      
-      if (lower && upper) {
-        const interval = upper.midiNote - lower.midiNote;
-        
-        // Min spacing: 3 semitones (minor 3rd)
-        if (interval < 3 && interval > 0) {
-          upper.midiNote = lower.midiNote + 3;
-          upper.noteName = this.midiToNote(upper.midiNote);
-        }
-        
-        // Max spacing: 16 semitones (major 10th) for inner voices
-        if (interval > 16) {
-          upper.midiNote = lower.midiNote + 12;
-          upper.noteName = this.midiToNote(upper.midiNote);
-        }
-      }
-    }
+    const byVoice = new Map(voices.map((voice) => [voice.voice, voice]));
+    const ordered = VOICE_LEADING_ORDER.map((voiceName) => byVoice.get(voiceName)).filter(
+      (voice): voice is OrchestratedVoice => Boolean(voice)
+    );
+    if (ordered.length !== VOICE_LEADING_ORDER.length) return;
 
-    // If we have previous voicing, minimize movement
-    if (this.lastVoicing.length > 0) {
-      for (const voice of voices) {
-        const lastNote = this.lastVoicing.find(v => v.voice === voice.voice);
-        if (lastNote && voice.role === 'harmony') {
-          // Try to minimize leap (prefer stepwise motion)
-          const currentInterval = Math.abs(voice.midiNote - lastNote.midiNote);
-          if (currentInterval > 6) {
-            // Try octave shift to get closer
-            const altUp = voice.midiNote + 12;
-            const altDown = voice.midiNote - 12;
-            const range = VOICE_RANGES[voice.voice];
-            
-            if (altDown >= range.min && Math.abs(altDown - lastNote.midiNote) < currentInterval) {
-              voice.midiNote = altDown;
-              voice.noteName = this.midiToNote(altDown);
-            } else if (altUp <= range.max && Math.abs(altUp - lastNote.midiNote) < currentInterval) {
-              voice.midiNote = altUp;
-              voice.noteName = this.midiToNote(altUp);
-            }
-          }
+    const candidates = ordered.map((voice) => this.octaveCandidates(voice));
+    let bestNotes: number[] | null = null;
+    let bestCost = Number.POSITIVE_INFINITY;
+
+    const visit = (index: number, selected: number[], cost: number): void => {
+      if (cost >= bestCost) return;
+      if (index === ordered.length) {
+        const span = selected[selected.length - 1] - selected[0];
+        const totalCost = cost + Math.abs(span - chamberStringsDna.ensemble.targetVerticalSpanSemitones) * 1.6;
+        if (totalCost < bestCost) {
+          bestCost = totalCost;
+          bestNotes = [...selected];
         }
+        return;
       }
+
+      const voice = ordered[index];
+      for (const note of candidates[index]) {
+        let candidateCost = cost + this.roleRegisterCost(voice.voice, note) + this.motionCost(voice.voice, note);
+        if (index > 0) {
+          const lowerNote = selected[index - 1];
+          const gap = note - lowerNote;
+          if (gap <= 0 || gap > 18) continue;
+          candidateCost += this.spacingCost(gap);
+          candidateCost += this.parallelPerfectCost(ordered[index - 1].voice, voice.voice, lowerNote, note);
+        }
+        visit(index + 1, [...selected, note], candidateCost);
+      }
+    };
+
+    visit(0, [], 0);
+    if (!bestNotes) return;
+    const optimizedNotes: number[] = bestNotes;
+    ordered.forEach((voice, index) => {
+      voice.midiNote = optimizedNotes[index];
+      voice.noteName = this.midiToNote(optimizedNotes[index]);
+    });
+  }
+
+  private octaveCandidates(voice: OrchestratedVoice): number[] {
+    const range = VOICE_RANGES[voice.voice];
+    const pitchClass = ((voice.midiNote % 12) + 12) % 12;
+    const notes: number[] = [];
+    for (let midi = range.min; midi <= range.max; midi += 1) {
+      if (midi % 12 === pitchClass) notes.push(midi);
     }
+    return notes;
+  }
+
+  private roleRegisterCost(voiceName: VoiceName, note: number): number {
+    const profile = DNA_ROLE_BY_VOICE[voiceName];
+    if (!profile) return 0;
+    const [minimum, maximum] = profile.centralRangeMidi;
+    const center = (minimum + maximum) / 2;
+    const outsideDistance = note < minimum ? minimum - note : note > maximum ? note - maximum : 0;
+    return outsideDistance * 3 + Math.abs(note - center) * 0.12;
+  }
+
+  private motionCost(voiceName: VoiceName, note: number): number {
+    const previous = this.lastVoicing.find((voice) => voice.voice === voiceName);
+    if (!previous) return 0;
+    const movement = Math.abs(note - previous.midiNote);
+    const profile = DNA_ROLE_BY_VOICE[voiceName];
+    const leapPenalty = movement >= 7 ? (movement - 6) * (1.4 - (profile?.largeLeapBudget ?? 0.18)) : 0;
+    return movement * 0.9 + leapPenalty;
+  }
+
+  private spacingCost(gap: number): number {
+    const target = chamberStringsDna.ensemble.targetAdjacentGapSemitones;
+    if (gap < target.preferredMin) return (target.preferredMin - gap) * 5 + 4;
+    if (gap > target.preferredMax) return (gap - target.preferredMax) * 2.5 + 2;
+    return Math.abs(gap - target.median) * 0.45;
+  }
+
+  private parallelPerfectCost(lowerVoice: VoiceName, upperVoice: VoiceName, lowerNote: number, upperNote: number): number {
+    const previousLower = this.lastVoicing.find((voice) => voice.voice === lowerVoice);
+    const previousUpper = this.lastVoicing.find((voice) => voice.voice === upperVoice);
+    if (!previousLower || !previousUpper) return 0;
+    const lowerMovement = lowerNote - previousLower.midiNote;
+    const upperMovement = upperNote - previousUpper.midiNote;
+    if (lowerMovement === 0 || upperMovement === 0 || Math.sign(lowerMovement) !== Math.sign(upperMovement)) return 0;
+    const previousInterval = Math.abs(previousUpper.midiNote - previousLower.midiNote) % 12;
+    const nextInterval = Math.abs(upperNote - lowerNote) % 12;
+    return previousInterval === nextInterval && (nextInterval === 0 || nextInterval === 7) ? 60 : 0;
   }
 
   // ============================================================================
