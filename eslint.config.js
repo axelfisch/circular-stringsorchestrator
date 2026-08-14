@@ -24,5 +24,11 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
     },
+  },
+  {
+    files: ['netlify/functions/**/*.ts'],
+    languageOptions: {
+      globals: globals.node,
+    },
   }
 );

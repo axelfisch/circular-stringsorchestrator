@@ -58,10 +58,23 @@ Validated preview -> Apply OR Cancel
 
 ## Étapes de construction
 
-1. **Contract V1** : types, conversions et validations testées - cette étape.
-2. **Function V1** : endpoint Netlify, validation serveur et adaptateur AI Gateway.
+1. **Contract V1** : types, conversions et validations testées - terminé.
+2. **Function V1** : endpoint Netlify, validation serveur et adaptateur AI Gateway - terminé.
 3. **Preview V1** : réponse, comparaison avec la séquence courante, Apply et Cancel dans le panneau existant sans refonte.
 4. **Hardening V1** : erreurs, délai maximal, limitation de débit, télémétrie minimale et tests de production.
+
+## Function V1 livrée
+
+- Endpoint moderne `POST /api/aixel-assistant` dans `netlify/functions/aixel-assistant.ts`.
+- Corps limité à 64 Kio et `Content-Type: application/json` obligatoire.
+- Validation du contrat avant toute initialisation du client IA.
+- Adaptateur OpenAI officiel relié aux variables serveur injectées par Netlify AI Gateway.
+- Modèle V1 : `gpt-4o-mini`, avec sortie JSON puis validation complète comme donnée non fiable.
+- Réponses d’erreur stables sans fuite de détails fournisseur et sans mise en cache.
+- Tests du service avec modèle simulé; aucun crédit IA n’est consommé par la suite de tests.
+- `netlify.toml` configure le build Vite et le répertoire des Functions, sans secret.
+
+Le test local complet de l’AI Gateway devra utiliser `netlify dev` après liaison volontaire du dépôt au site Netlify. Aucun déploiement n’est effectué par cette étape.
 
 ## Critères d’acceptation finaux
 
