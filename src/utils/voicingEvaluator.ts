@@ -35,6 +35,14 @@ export interface EvaluationComparison {
   metricDeltas: Record<string, number>;
 }
 
+export interface SequenceEvaluationOptions {
+  bassLanguageTarget?: {
+    motionWithinFiveSemitones: number;
+    leapAtLeastSevenSemitones: number;
+    label?: string;
+  };
+}
+
 const VOICE_ORDER = ['Violin1', 'Violin2', 'Viola1', 'Viola2', 'Cello', 'Contrabass'] as const;
 const ROLE_PROFILE = Object.fromEntries(dna.voiceRoles.map((role) => [role.voice, role]));
 
@@ -185,7 +193,7 @@ function parallelPerfectRate(frames: VoicingFrame[]): number {
   return comparisons ? parallels / comparisons : 0;
 }
 
-export function evaluateSequence(frames: VoicingFrame[]): SequenceEvaluation {
+export function evaluateSequence(frames: VoicingFrame[], options: SequenceEvaluationOptions = {}): SequenceEvaluation {
   if (frames.length === 0) {
     const empty = metric('frame-quality', 'Average frame quality', 0, 65, 'No frames supplied');
     return { totalScore: 0, grade: 'needs-work', metrics: [empty], warnings: ['No voicing frames supplied.'], frameScores: [] };
@@ -217,15 +225,22 @@ export function evaluateSequence(frames: VoicingFrame[]): SequenceEvaluation {
     const current = frames[index].voices.find((voice) => voice.voice === 'Contrabass');
     if (previous && current) bassMoves.push(Math.abs(current.midiNote - previous.midiNote));
   }
-  const withinFive = bassMoves.length ? bassMoves.filter((move) => move <= 5).length / bassMoves.length : dna.bassLanguage.motionWithinFiveSemitones;
-  const largeLeaps = bassMoves.length ? bassMoves.filter((move) => move >= 7).length / bassMoves.length : dna.bassLanguage.leapAtLeastSevenSemitones;
-  const bassScore = clamp(100 - Math.abs(withinFive - dna.bassLanguage.motionWithinFiveSemitones) * 80 - Math.abs(largeLeaps - dna.bassLanguage.leapAtLeastSevenSemitones) * 60);
+  const bassTarget = options.bassLanguageTarget ?? dna.bassLanguage;
+  const withinFive = bassMoves.length ? bassMoves.filter((move) => move <= 5).length / bassMoves.length : bassTarget.motionWithinFiveSemitones;
+  const largeLeaps = bassMoves.length ? bassMoves.filter((move) => move >= 7).length / bassMoves.length : bassTarget.leapAtLeastSevenSemitones;
+  const bassScore = clamp(100 - Math.abs(withinFive - bassTarget.motionWithinFiveSemitones) * 80 - Math.abs(largeLeaps - bassTarget.leapAtLeastSevenSemitones) * 60);
 
   const metrics = [
     metric('frame-quality', 'Average frame quality', frameAverage, 65, `${frames.length} harmonies evaluated`),
     metric('motion', 'Role-aware melodic motion', motion, 20, 'Small-motion targets and role-specific leap budgets'),
     metric('parallel-perfects', 'Parallel perfect control', parallelScore, 8, `${rounded(parallelRate * 100)}% observed; 2% soft ceiling`),
-    metric('bass-motion', 'Bass movement language', bassScore, 7, `${rounded(withinFive * 100)}% within five semitones; ${rounded(largeLeaps * 100)}% large leaps`),
+    metric(
+      'bass-motion',
+      'Bass movement language',
+      bassScore,
+      7,
+      `${rounded(withinFive * 100)}% within five semitones; ${rounded(largeLeaps * 100)}% large leaps; ${options.bassLanguageTarget?.label ?? 'corpus-wide target'}`,
+    ),
   ];
   const totalScore = weightedTotal(metrics);
   const warnings = frameEvaluations.flatMap((result, index) => result.warnings.map((warning) => `Frame ${index + 1}: ${warning}`));

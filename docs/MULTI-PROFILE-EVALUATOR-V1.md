@@ -24,12 +24,12 @@ These floors are regression guards, not claims of absolute artistic quality. A p
 | Profile | Score | Grade | Parallel perfects | Bass motion |
 | --- | ---: | --- | ---: | ---: |
 | Reference | 90.4 | excellent | 100.0 | 84.2 |
-| Lyrical | 87.4 | excellent | 100.0 | 49.2 |
+| Lyrical | 91.0 | excellent | 100.0 | 100.0 |
 | Kinetic | 90.2 | excellent | 100.0 | 92.9 |
 | Modal | 89.3 | excellent | 100.0 | 72.5 |
-| **Aggregate** | **89.3** | **pass** | — | — |
+| **Aggregate** | **90.2** | **pass** | — | — |
 
-The current engine passes all three acceptance rules. The principal measured weakness is **Lyrical bass motion**. It should be investigated musically before any new generation rule is introduced.
+The current engine passes all three acceptance rules. Lyrical uses its explicit connected-bass character target; the other profiles retain the corpus-wide bass target. See `LYRICAL-BASS-MOTION-V1.md` for the calibration rationale and the unchanged generated line.
 
 ## Reproduce
 

@@ -7,6 +7,8 @@ export interface ProfileEvaluation {
   label: string;
   intent: string;
   progression: string[];
+  bassLine: number[];
+  bassMoves: number[];
   result: SequenceEvaluation;
 }
 
@@ -32,13 +34,18 @@ export function evaluateProfile(profile: VoicingEvaluationProfile): ProfileEvalu
     label: symbol,
     voices: engine.orchestrateChord(notes, symbol).voices,
   }));
+  const bassLine = frames.map((frame) => (
+    frame.voices.find((voice) => voice.voice === 'Contrabass')?.midiNote ?? 0
+  ));
 
   return {
     id: profile.id,
     label: profile.label,
     intent: profile.intent,
     progression: profile.progression.map(({ symbol }) => symbol),
-    result: evaluateSequence(frames),
+    bassLine,
+    bassMoves: bassLine.slice(1).map((note, index) => Math.abs(note - bassLine[index])),
+    result: evaluateSequence(frames, { bassLanguageTarget: profile.bassLanguageTarget }),
   };
 }
 
