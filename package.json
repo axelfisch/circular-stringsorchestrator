@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.functions.json",
     "test": "vitest run",
-    "evaluate:voicings": "vite-node scripts/evaluate-current-voicings.ts"
+    "evaluate:voicings": "vite-node scripts/evaluate-current-voicings.ts",
+    "evaluate:profiles": "vite-node scripts/evaluate-voicing-profiles.ts"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
