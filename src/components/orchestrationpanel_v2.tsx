@@ -3,17 +3,32 @@
 // Enhanced with AiXEL Voicing Blueprints display
 // by AxelFisch©2025/2026
 
-import { useState, useEffect } from 'react';
-import { Music, Sparkles, Send, Loader2, Volume2, VolumeX, Info } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Music, Sparkles, Send, Loader2, Volume2, VolumeX, Info, Play, Check, X } from 'lucide-react';
 import { StringsEngine, getStringsEngine, OrchestratedVoice, OrchestrationResult } from '../utils/stringsengine_v2';
 import { chordToMidiNotes, getChordSymbol } from '../utils/chordMapper';
+import { AudioEngine } from '../utils/audioEngine';
+import {
+  AiXELAssistantResponse,
+  assistantMeasuresToSequence
+} from '../utils/aixelAssistantContract';
+import {
+  AiXELAssistantClientError,
+  buildAiXELAssistantRequest,
+  requestAiXELAssistant
+} from '../utils/aixelAssistantClient';
+import { SequenceMeasure } from '../utils/sequencerModel';
 
 interface OrchestrationPanelProps {
   selectedKey: string;
   selectedExtension: string;
   selectedBassInversion?: string;
   isForeignBass?: boolean;
-  onGPTResponse?: (response: string) => void;
+  selectedStyle: string;
+  measures: SequenceMeasure[];
+  timeSignature: '4/4';
+  tempo: number;
+  onApplyProposal: (measures: SequenceMeasure[]) => void;
 }
 
 const VOICE_COLORS: Record<string, string> = {
@@ -47,16 +62,24 @@ export default function OrchestrationPanel({
   selectedExtension,
   selectedBassInversion,
   isForeignBass,
-  onGPTResponse
+  selectedStyle,
+  measures,
+  timeSignature,
+  tempo,
+  onApplyProposal
 }: OrchestrationPanelProps) {
   const [orchestration, setOrchestration] = useState<OrchestratedVoice[]>([]);
   const [orchestrationResult, setOrchestrationResult] = useState<OrchestrationResult | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [gptPrompt, setGptPrompt] = useState('');
   const [isLoadingGPT, setIsLoadingGPT] = useState(false);
-  const [gptResponse, setGptResponse] = useState<string>('');
+  const [assistantResponse, setAssistantResponse] = useState<AiXELAssistantResponse | null>(null);
+  const [assistantError, setAssistantError] = useState('');
+  const [isPlayingProposal, setIsPlayingProposal] = useState(false);
+  const [proposalBar, setProposalBar] = useState(-1);
   const [stringsEngine, setStringsEngine] = useState<StringsEngine | null>(null);
   const [showBlueprintInfo, setShowBlueprintInfo] = useState(false);
+  const proposalEngineRef = useRef<AudioEngine | null>(null);
 
   useEffect(() => {
     const engine = getStringsEngine();
@@ -64,6 +87,10 @@ export default function OrchestrationPanel({
     
     // Initialize on mount
     engine.initialize().catch(console.error);
+  }, []);
+
+  useEffect(() => () => {
+    proposalEngineRef.current?.dispose();
   }, []);
 
   useEffect(() => {
@@ -113,42 +140,94 @@ export default function OrchestrationPanel({
   };
 
   const handleSendToGPT = async () => {
-    if (!gptPrompt.trim()) return;
+    if (!gptPrompt.trim() || isLoadingGPT) return;
 
     setIsLoadingGPT(true);
-    
-    // Build context about current orchestration
-    const orchestrationContext = orchestration.map(v => 
-      `${v.voice}: ${v.noteName} (${v.role})`
-    ).join(', ');
-    
-    const fullPrompt = `
-Current chord: ${selectedKey}${selectedExtension}${selectedBassInversion ? `/${selectedBassInversion}` : ''}
-Orchestration: ${orchestrationContext}
-
-User request: ${gptPrompt}
-`;
+    setAssistantError('');
+    setAssistantResponse(null);
+    proposalEngineRef.current?.stop();
+    setIsPlayingProposal(false);
+    setProposalBar(-1);
 
     try {
-      // Open GPT in new tab with pre-filled context
-      const gptUrl = `https://chatgpt.com/g/g-67f62c947c608191a9c8dc1cd0101e08-aixel-music-orchestrator`;
-      
-      // Copy context to clipboard for user to paste
-      await navigator.clipboard.writeText(fullPrompt);
-      
-      setGptResponse(`Context copied to clipboard! Opening AiXEL GPT...\n\nPaste your context when you arrive.`);
-      
-      // Open GPT
-      window.open(gptUrl, '_blank');
-      
-      if (onGPTResponse) {
-        onGPTResponse(fullPrompt);
-      }
-    } catch {
-      setGptResponse('Error: Could not connect to GPT. Please try the direct link.');
+      const request = buildAiXELAssistantRequest({
+        prompt: gptPrompt,
+        selectedKey,
+        selectedExtension,
+        selectedBassInversion,
+        isForeignBass,
+        selectedStyle,
+        timeSignature,
+        tempo,
+        measures
+      });
+      setAssistantResponse(await requestAiXELAssistant(request));
+    } catch (error) {
+      setAssistantError(
+        error instanceof AiXELAssistantClientError
+          ? error.message
+          : 'AiXEL Assistant is temporarily unavailable.'
+      );
     } finally {
       setIsLoadingGPT(false);
     }
+  };
+
+  const createLocalId = (prefix: string) => () => {
+    const randomId = typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`;
+    return `${prefix}-${randomId}`;
+  };
+
+  const stopProposalPreview = () => {
+    proposalEngineRef.current?.stop();
+    setIsPlayingProposal(false);
+    setProposalBar(-1);
+  };
+
+  const handleProposalPreview = async () => {
+    const proposal = assistantResponse?.proposal;
+    if (!proposal) return;
+    if (isPlayingProposal) {
+      stopProposalPreview();
+      return;
+    }
+
+    const engine = proposalEngineRef.current ?? new AudioEngine();
+    proposalEngineRef.current = engine;
+    engine.stop();
+    engine.scheduleSequence(
+      assistantMeasuresToSequence(proposal.measures, createLocalId('preview')),
+      tempo,
+      false,
+      (barIndex) => {
+        setProposalBar(barIndex);
+        if (barIndex === -1) setIsPlayingProposal(false);
+      }
+    );
+    try {
+      await engine.play();
+      setIsPlayingProposal(true);
+    } catch {
+      stopProposalPreview();
+      setAssistantError('The proposal preview could not start.');
+    }
+  };
+
+  const handleApplyProposal = () => {
+    const proposal = assistantResponse?.proposal;
+    if (!proposal) return;
+    stopProposalPreview();
+    onApplyProposal(assistantMeasuresToSequence(proposal.measures, createLocalId('assistant')));
+    setAssistantResponse(null);
+    setGptPrompt('');
+  };
+
+  const handleCancelProposal = () => {
+    stopProposalPreview();
+    setAssistantResponse(null);
+    setAssistantError('');
   };
 
   // Sort voices from high to low for display
@@ -264,7 +343,7 @@ User request: ${gptPrompt}
       <div className="border-t border-[#334155] pt-4">
         <div className="flex items-center gap-2 mb-3">
           <Sparkles className="w-4 h-4 text-[#10B981]" />
-          <span className="text-sm font-semibold text-[#F9FAFB]">Ask AiXEL GPT</span>
+          <span className="text-sm font-semibold text-[#F9FAFB]">Ask AiXEL Assistant</span>
         </div>
         
         <div className="flex gap-2">
@@ -272,6 +351,7 @@ User request: ${gptPrompt}
             type="text"
             value={gptPrompt}
             onChange={(e) => setGptPrompt(e.target.value)}
+            maxLength={800}
             placeholder="e.g., Suggest a progression from this chord..."
             className="flex-1 bg-[#1E293B] border border-[#334155] rounded-lg px-3 py-2 text-sm text-[#F9FAFB] placeholder-[#64748B] focus:outline-none focus:border-[#10B981]"
             onKeyDown={(e) => e.key === 'Enter' && handleSendToGPT()}
@@ -279,6 +359,7 @@ User request: ${gptPrompt}
           <button
             onClick={handleSendToGPT}
             disabled={isLoadingGPT || !gptPrompt.trim()}
+            aria-label="Send to AiXEL Assistant"
             className="px-4 py-2 bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-all flex items-center gap-2"
           >
             {isLoadingGPT ? (
@@ -289,9 +370,66 @@ User request: ${gptPrompt}
           </button>
         </div>
 
-        {gptResponse && (
-          <div className="mt-3 p-3 bg-[#1E293B] rounded-lg text-sm text-[#CBD5F5] whitespace-pre-wrap">
-            {gptResponse}
+        {assistantError && (
+          <div className="mt-3 p-3 bg-[#1E293B] rounded-lg text-sm text-[#FCA5A5]">
+            {assistantError}
+          </div>
+        )}
+
+        {assistantResponse && (
+          <div className="mt-3 p-3 bg-[#1E293B] rounded-lg text-sm text-[#CBD5F5]">
+            <p>{assistantResponse.message}</p>
+
+            {assistantResponse.proposal && (
+              <div className="mt-3 pt-3 border-t border-[#334155]">
+                <p className="font-semibold text-[#F59E0B]">{assistantResponse.proposal.title}</p>
+                <p className="mt-1 text-xs text-[#94A3B8]">{assistantResponse.proposal.rationale}</p>
+
+                <div className="grid grid-cols-4 gap-1.5 mt-3">
+                  {assistantResponse.proposal.measures.map((measure, index) => (
+                    <div
+                      key={measure.barNumber}
+                      className={`rounded-md border px-1.5 py-2 text-center transition-colors ${
+                        proposalBar === index
+                          ? 'bg-[#F59E0B]/20 border-[#F59E0B]'
+                          : 'bg-[#0F172A] border-[#334155]'
+                      }`}
+                    >
+                      <div className="text-[9px] text-[#64748B]">bar {measure.barNumber}</div>
+                      <div className="text-[10px] font-semibold text-[#F9FAFB] truncate">
+                        {measure.slots.filter(Boolean).map((slot) =>
+                          `${slot?.key}${slot?.extension}${slot?.bassInversion ? `/${slot.bassInversion}` : ''}`
+                        ).join(' · ') || '—'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-3">
+                  <button
+                    onClick={handleProposalPreview}
+                    className="px-3 py-1.5 rounded-lg bg-[#16A34A] hover:bg-[#15803D] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                  >
+                    {isPlayingProposal ? <VolumeX className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                    {isPlayingProposal ? 'Stop' : 'Preview'}
+                  </button>
+                  <button
+                    onClick={handleApplyProposal}
+                    className="px-3 py-1.5 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    Apply
+                  </button>
+                  <button
+                    onClick={handleCancelProposal}
+                    className="px-3 py-1.5 rounded-lg border border-[#475569] hover:bg-[#334155] text-[#CBD5F5] text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

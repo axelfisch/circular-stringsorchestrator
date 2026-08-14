@@ -10,13 +10,14 @@ interface ChordSequencerProps {
   timeSignature: string;
   measures: SequenceMeasure[];
   selectedStyle: string;
+  tempo: number;
+  onTempoChange: (tempo: number) => void;
   onRemoveChord: (id: string) => void;
   onClearSequence: () => void;
   onToggleMeasure: (measureIndex: number) => void;
 }
 
-export default function ChordSequencer({ timeSignature, measures, selectedStyle, onRemoveChord, onClearSequence, onToggleMeasure }: ChordSequencerProps) {
-  const [tempo, setTempo] = useState(120);
+export default function ChordSequencer({ timeSignature, measures, selectedStyle, tempo, onTempoChange, onRemoveChord, onClearSequence, onToggleMeasure }: ChordSequencerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [loopEnabled, setLoopEnabled] = useState(false);
   const [currentBar, setCurrentBar] = useState<number>(-1);
@@ -275,7 +276,7 @@ export default function ChordSequencer({ timeSignature, measures, selectedStyle,
                   min="40"
                   max="260"
                   value={tempo}
-                  onChange={(e) => setTempo(Number(e.target.value))}
+                  onChange={(e) => onTempoChange(Number(e.target.value))}
                   className="flex-1 h-2 bg-[#1E293B] rounded-lg appearance-none cursor-pointer"
                   style={{
                     background: `linear-gradient(to right, #16A34A 0%, #16A34A ${((tempo - 40) / 220) * 100}%, #1E293B ${((tempo - 40) / 220) * 100}%, #1E293B 100%)`

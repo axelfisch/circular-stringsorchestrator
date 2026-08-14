@@ -19,7 +19,8 @@ function App() {
   const [isForeignBass, setIsForeignBass] = useState<boolean>(false);
   const [selectedStyle, setSelectedStyle] = useState<string>('');
   const [measures, setMeasures] = useState(createEmptyMeasures);
-  const [timeSignature] = useState<string>('4/4');
+  const [tempo, setTempo] = useState(120);
+  const timeSignature = '4/4' as const;
 
   const handleSelectionChange = (key: string, extension: string, bassInversion?: string, isForeign?: boolean) => {
     setSelectedKey(key);
@@ -111,6 +112,11 @@ function App() {
               selectedExtension={selectedExtension}
               selectedBassInversion={selectedBassInversion}
               isForeignBass={isForeignBass}
+              selectedStyle={selectedStyle}
+              measures={measures}
+              timeSignature={timeSignature}
+              tempo={tempo}
+              onApplyProposal={setMeasures}
             />
           </div>
         </div>
@@ -122,6 +128,8 @@ function App() {
           timeSignature={timeSignature}
           measures={measures}
           selectedStyle={selectedStyle}
+          tempo={tempo}
+          onTempoChange={setTempo}
           onRemoveChord={handleRemoveChord}
           onClearSequence={handleClearSequence}
           onToggleMeasure={(measureIndex) => setMeasures((current) => toggleMeasureSplit(current, measureIndex))}
