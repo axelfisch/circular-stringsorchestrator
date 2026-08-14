@@ -7,6 +7,11 @@ export interface VoicingEvaluationProfile {
   id: 'reference' | 'lyrical' | 'kinetic' | 'modal';
   label: string;
   intent: string;
+  bassLanguageTarget?: {
+    motionWithinFiveSemitones: number;
+    leapAtLeastSevenSemitones: number;
+    label: string;
+  };
   progression: EvaluationChord[];
 }
 
@@ -27,6 +32,11 @@ export const VOICING_EVALUATION_PROFILES: VoicingEvaluationProfile[] = [
     id: 'lyrical',
     label: 'Lyrical',
     intent: 'Long-breathed harmony with inversions, connected bass and restrained inner-voice movement.',
+    bassLanguageTarget: {
+      motionWithinFiveSemitones: 1,
+      leapAtLeastSevenSemitones: 0,
+      label: 'Lyrical connected-bass target',
+    },
     progression: [
       { notes: [52, 48, 55, 59, 62], symbol: 'Cmaj9' },
       { notes: [47, 52, 55, 59, 62, 64], symbol: 'Emin11' },
