@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "name": "Axel Fisch Chamber Strings DNA",
+  "sourceCorpus": { "midiFiles": 11, "canonicalSextets": 7, "totalNotes": 24411, "durationMinutes": 54.15 },
+  "ensemble": {
+    "voiceCount": 6,
+    "targetVerticalSpanSemitones": 32,
+    "targetAdjacentGapSemitones": { "median": 5, "preferredMin": 3, "preferredMax": 8 },
+    "voiceCrossing": { "defaultTarget": 0.04, "softMaximum": 0.08 },
+    "parallelPerfectPolicy": { "mode": "penalize_not_forbid", "defaultSoftMaximumRate": 0.02 }
+  },
+  "voiceRoles": [
+    { "id": "crown", "voice": "Violin1", "centralRangeMidi": [67, 81], "smallMotionTarget": 0.80, "largeLeapBudget": 0.18 },
+    { "id": "tension", "voice": "Violin2", "centralRangeMidi": [63, 76], "smallMotionTarget": 0.83, "largeLeapBudget": 0.16 },
+    { "id": "upperHarmony", "voice": "Viola1", "centralRangeMidi": [61, 71], "smallMotionTarget": 0.84, "largeLeapBudget": 0.14 },
+    { "id": "lowerHarmony", "voice": "Viola2", "centralRangeMidi": [58, 69], "smallMotionTarget": 0.82, "largeLeapBudget": 0.17 },
+    { "id": "counterline", "voice": "Cello", "centralRangeMidi": [45, 58], "smallMotionTarget": 0.77, "largeLeapBudget": 0.21 },
+    { "id": "foundation", "voice": "Contrabass", "centralRangeMidi": [33, 46], "smallMotionTarget": 0.73, "largeLeapBudget": 0.23 }
+  ],
+  "verticalLanguage": {
+    "intervalClassWeights": [0.166, 0.039, 0.151, 0.205, 0.152, 0.262, 0.025],
+    "bassRelativeWeights": [0.350, 0.009, 0.071, 0.080, 0.080, 0.068, 0.018, 0.129, 0.031, 0.070, 0.066, 0.029]
+  },
+  "bassLanguage": { "motionWithinTwoSemitones": 0.32, "motionWithinFiveSemitones": 0.62, "leapAtLeastSevenSemitones": 0.34 }
+}
