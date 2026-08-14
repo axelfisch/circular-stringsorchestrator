@@ -1,6 +1,6 @@
 import type { Context } from '@netlify/functions';
 import { describe, expect, it, vi } from 'vitest';
-import handler, { config } from './aixel-assistant';
+import handler, { config } from '../aixel-assistant';
 
 describe('AiXEL Assistant function hardening', () => {
   it('rate-limits by IP at the Netlify boundary', () => {
