@@ -60,7 +60,7 @@ Validated preview -> Apply OR Cancel
 
 1. **Contract V1** : types, conversions et validations testées - terminé.
 2. **Function V1** : endpoint Netlify, validation serveur et adaptateur AI Gateway - terminé.
-3. **Preview V1** : réponse, comparaison avec la séquence courante, Apply et Cancel dans le panneau existant sans refonte.
+3. **Preview V1** : réponse, comparaison avec la séquence courante, Apply et Cancel dans le panneau existant sans refonte - terminé.
 4. **Hardening V1** : erreurs, délai maximal, limitation de débit, télémétrie minimale et tests de production.
 
 ## Function V1 livrée
@@ -75,6 +75,18 @@ Validated preview -> Apply OR Cancel
 - `netlify.toml` configure le build Vite et le répertoire des Functions, sans secret.
 
 Le test local complet de l’AI Gateway devra utiliser `netlify dev` après liaison volontaire du dépôt au site Netlify. Aucun déploiement n’est effectué par cette étape.
+
+## Preview V1 livré
+
+- Le panneau AiXEL existant appelle maintenant `/api/aixel-assistant` sans ouvrir un autre onglet.
+- Accord sélectionné, style, tempo, 4/4 et huit mesures sont transmis par le contrat versionné.
+- La réponse est revalidée dans le navigateur avant tout affichage.
+- Une proposition affiche son titre, sa justification et ses huit mesures dans le panneau actuel.
+- Preview lit une copie temporaire de la progression sans modifier le projet.
+- Apply recrée de nouveaux identifiants locaux et remplace explicitement les huit mesures.
+- Cancel arrête la préécoute et supprime la proposition sans toucher à la séquence.
+- Le tempo est maintenant détenu par l’application afin que Assistant, Playback et Exports partagent la même valeur.
+- Le lien GPT externe de l’en-tête demeure disponible comme solution de secours.
 
 ## Critères d’acceptation finaux
 
