@@ -53,15 +53,17 @@ Validated preview -> Apply OR Cancel
 - Sortie du modèle traitée comme donnée non fiable jusqu’à validation complète.
 - Aucun HTML produit par le modèle n’est rendu.
 - Message utilisateur sobre en cas d’indisponibilité; le projet courant reste intact.
-- Journaliser seulement l’identifiant de requête, la durée et le statut; ne pas journaliser inutilement les compositions.
-- Ajouter une limitation de débit avant une ouverture publique ou payante.
+- Journaliser seulement l’identifiant de requête, la durée et le statut; aucune composition ni aucun prompt n’est journalisé.
+- Limiter l’endpoint à dix requêtes par minute et par adresse IP à la frontière Netlify.
+- Interrompre une inférence serveur après 18 secondes et une attente navigateur après 22 secondes.
+- Annuler et ignorer toute réponse devenue obsolète après un changement de contexte ou la fermeture du panneau.
 
 ## Étapes de construction
 
 1. **Contract V1** : types, conversions et validations testées - terminé.
 2. **Function V1** : endpoint Netlify, validation serveur et adaptateur AI Gateway - terminé.
 3. **Preview V1** : réponse, comparaison avec la séquence courante, Apply et Cancel dans le panneau existant sans refonte - terminé.
-4. **Hardening V1** : erreurs, délai maximal, limitation de débit, télémétrie minimale et tests de production.
+4. **Hardening V1** : erreurs, délai maximal, limitation de débit, télémétrie minimale et tests de production - terminé.
 
 ## Function V1 livrée
 
@@ -87,6 +89,17 @@ Le test local complet de l’AI Gateway devra utiliser `netlify dev` après liai
 - Cancel arrête la préécoute et supprime la proposition sans toucher à la séquence.
 - Le tempo est maintenant détenu par l’application afin que Assistant, Playback et Exports partagent la même valeur.
 - Le lien GPT externe de l’en-tête demeure disponible comme solution de secours.
+
+## Hardening V1 livré
+
+- Délai maximal de 18 secondes côté Function; l’appel AI Gateway reçoit un `AbortSignal` réel.
+- Délai maximal de 22 secondes côté navigateur, avec messages distincts pour délai dépassé, annulation et erreur réseau.
+- Une requête en cours est annulée lorsque le contexte musical change ou lorsque le composant est démonté.
+- Les réponses arrivées après une annulation ou un changement de contexte sont ignorées et ne peuvent plus afficher ni appliquer une proposition obsolète.
+- La Function est limitée par Netlify à dix requêtes par minute et par adresse IP.
+- Chaque réponse porte `X-Request-Id`; la télémétrie structurée contient uniquement cet identifiant, le statut HTTP et la durée.
+- Aucun prompt, accord, style, tempo ou contenu de mesure n’est écrit dans les journaux.
+- Les erreurs fournisseur et les délais restent génériques et ne divulguent aucun détail sensible.
 
 ## Critères d’acceptation finaux
 

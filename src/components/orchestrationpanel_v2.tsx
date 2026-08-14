@@ -80,6 +80,8 @@ export default function OrchestrationPanel({
   const [stringsEngine, setStringsEngine] = useState<StringsEngine | null>(null);
   const [showBlueprintInfo, setShowBlueprintInfo] = useState(false);
   const proposalEngineRef = useRef<AudioEngine | null>(null);
+  const assistantRequestRef = useRef<AbortController | null>(null);
+  const assistantRequestSequenceRef = useRef(0);
 
   useEffect(() => {
     const engine = getStringsEngine();
@@ -90,8 +92,22 @@ export default function OrchestrationPanel({
   }, []);
 
   useEffect(() => () => {
+    assistantRequestSequenceRef.current += 1;
+    assistantRequestRef.current?.abort();
     proposalEngineRef.current?.dispose();
   }, []);
+
+  useEffect(() => {
+    assistantRequestSequenceRef.current += 1;
+    assistantRequestRef.current?.abort();
+    assistantRequestRef.current = null;
+    proposalEngineRef.current?.stop();
+    setIsLoadingGPT(false);
+    setAssistantResponse(null);
+    setAssistantError('');
+    setIsPlayingProposal(false);
+    setProposalBar(-1);
+  }, [selectedKey, selectedExtension, selectedBassInversion, isForeignBass, selectedStyle, timeSignature, tempo, measures]);
 
   useEffect(() => {
     if (!stringsEngine || !selectedKey) return;
@@ -149,6 +165,11 @@ export default function OrchestrationPanel({
     setIsPlayingProposal(false);
     setProposalBar(-1);
 
+    assistantRequestRef.current?.abort();
+    const controller = new AbortController();
+    assistantRequestRef.current = controller;
+    const requestSequence = ++assistantRequestSequenceRef.current;
+
     try {
       const request = buildAiXELAssistantRequest({
         prompt: gptPrompt,
@@ -161,15 +182,26 @@ export default function OrchestrationPanel({
         tempo,
         measures
       });
-      setAssistantResponse(await requestAiXELAssistant(request));
+      const response = await requestAiXELAssistant(request, { signal: controller.signal });
+      if (requestSequence === assistantRequestSequenceRef.current) {
+        setAssistantResponse(response);
+      }
     } catch (error) {
-      setAssistantError(
-        error instanceof AiXELAssistantClientError
-          ? error.message
-          : 'AiXEL Assistant is temporarily unavailable.'
-      );
+      if (requestSequence === assistantRequestSequenceRef.current) {
+        const isCancelled = error instanceof AiXELAssistantClientError && error.code === 'REQUEST_ABORTED';
+        if (!isCancelled) {
+          setAssistantError(
+            error instanceof AiXELAssistantClientError
+              ? error.message
+              : 'AiXEL Assistant is temporarily unavailable.'
+          );
+        }
+      }
     } finally {
-      setIsLoadingGPT(false);
+      if (requestSequence === assistantRequestSequenceRef.current) {
+        assistantRequestRef.current = null;
+        setIsLoadingGPT(false);
+      }
     }
   };
 

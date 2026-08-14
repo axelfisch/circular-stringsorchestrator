@@ -30,7 +30,7 @@ export function buildAiXELAssistantMessages(request: AiXELAssistantRequest): Ope
 
 export function createOpenAiGatewayModel(): AiXELAssistantModel {
   return {
-    async generate(request) {
+    async generate(request, signal) {
       const apiKey = Netlify.env.get('OPENAI_API_KEY');
       const baseURL = Netlify.env.get('OPENAI_BASE_URL');
 
@@ -39,13 +39,16 @@ export function createOpenAiGatewayModel(): AiXELAssistantModel {
       }
 
       const client = new OpenAI({ apiKey, baseURL });
-      const completion = await client.chat.completions.create({
-        model: AIXEL_ASSISTANT_MODEL,
-        messages: buildAiXELAssistantMessages(request),
-        response_format: { type: 'json_object' },
-        temperature: 0.5,
-        max_tokens: 2400
-      });
+      const completion = await client.chat.completions.create(
+        {
+          model: AIXEL_ASSISTANT_MODEL,
+          messages: buildAiXELAssistantMessages(request),
+          response_format: { type: 'json_object' },
+          temperature: 0.5,
+          max_tokens: 2400
+        },
+        { signal }
+      );
 
       const content = completion.choices[0]?.message.content;
       if (!content) throw new Error('The model returned an empty response.');

@@ -62,4 +62,22 @@ describe('AiXEL Assistant browser client', () => {
     });
     await expect(requestAiXELAssistant(buildRequest(), malformed)).rejects.toBeInstanceOf(AiXELAssistantClientError);
   });
+
+  it('times out a stalled request and forwards cancellation without treating it as a network error', async () => {
+    vi.useFakeTimers();
+    const stalledFetcher = vi.fn((_input: RequestInfo | URL, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')), { once: true });
+    }));
+
+    const timedOut = requestAiXELAssistant(buildRequest(), { fetcher: stalledFetcher, timeoutMs: 50 });
+    const timeoutExpectation = expect(timedOut).rejects.toMatchObject({ code: 'REQUEST_TIMEOUT' });
+    await vi.advanceTimersByTimeAsync(50);
+    await timeoutExpectation;
+
+    const caller = new AbortController();
+    const cancelled = requestAiXELAssistant(buildRequest(), { fetcher: stalledFetcher, signal: caller.signal, timeoutMs: 500 });
+    caller.abort();
+    await expect(cancelled).rejects.toMatchObject({ code: 'REQUEST_ABORTED' });
+    vi.useRealTimers();
+  });
 });
