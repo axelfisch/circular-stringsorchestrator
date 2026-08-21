@@ -73,7 +73,12 @@ function line(x1: number, y1: number, x2: number, y2: number, color: string, lin
   return `${color} RG ${lineWidth} w ${x1} ${y1} m ${x2} ${y2} l S`;
 }
 
-function buildPageContent(measures: SequenceMeasure[], tempo: number, selectedStyle: string): string {
+function buildPageContent(
+  measures: SequenceMeasure[],
+  tempo: number,
+  selectedStyle: string,
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): string {
   const commands: string[] = [fillRect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, '0.025 0.045 0.085')];
   const left = 36;
   const contentWidth = PAGE_WIDTH - left * 2;
@@ -85,7 +90,7 @@ function buildPageContent(measures: SequenceMeasure[], tempo: number, selectedSt
     drawText('AiXEL StringsOrchestrator', left, 548, 22, 'F2'),
     drawText('Progression & String Orchestration', left, 528, 10, 'F1', '0.96 0.62 0.04'),
     drawText(`Composer: Axel Fisch   |   Tempo: ${tempo} BPM   |   Meter: 4/4`, left, 504, 9),
-    drawText(`Style: ${selectedStyle || 'Custom'}`, 616, 504, 9, 'F1', '0.45 0.83 0.62'),
+    drawText(`Style: ${selectedStyle || 'Custom'}   |   Texture: ${texture}`, 520, 504, 9, 'F1', '0.45 0.83 0.62'),
     line(left, 492, PAGE_WIDTH - left, 492, '0.12 0.72 0.38', 1.5)
   );
 
@@ -124,7 +129,7 @@ function buildPageContent(measures: SequenceMeasure[], tempo: number, selectedSt
     );
   });
 
-  const notes = buildMidiExportNotes(measures);
+  const notes = buildMidiExportNotes(measures, texture);
   VOICES.forEach((voice, rowIndex) => {
     const y = 346 - (rowIndex + 1) * 42;
     const rowColor = rowIndex % 2 === 0 ? '0.055 0.09 0.15' : '0.045 0.075 0.13';
@@ -180,8 +185,13 @@ function buildPdf(objects: string[]): Uint8Array {
   return encoder.encode(chunks.join('') + xref);
 }
 
-export function generatePdfFile(measures: SequenceMeasure[], tempo: number, selectedStyle = ''): Uint8Array {
-  const content = buildPageContent(measures, tempo, selectedStyle);
+export function generatePdfFile(
+  measures: SequenceMeasure[],
+  tempo: number,
+  selectedStyle = '',
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): Uint8Array {
+  const content = buildPageContent(measures, tempo, selectedStyle, texture);
   const contentLength = new TextEncoder().encode(content).length;
   return buildPdf([
     '<< /Type /Catalog /Pages 2 0 R >>',
@@ -194,8 +204,13 @@ export function generatePdfFile(measures: SequenceMeasure[], tempo: number, sele
   ]);
 }
 
-export function downloadPdfFile(measures: SequenceMeasure[], tempo: number, selectedStyle = ''): void {
-  const bytes = generatePdfFile(measures, tempo, selectedStyle);
+export function downloadPdfFile(
+  measures: SequenceMeasure[],
+  tempo: number,
+  selectedStyle = '',
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): void {
+  const bytes = generatePdfFile(measures, tempo, selectedStyle, texture);
   const blob = new Blob([bytes], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

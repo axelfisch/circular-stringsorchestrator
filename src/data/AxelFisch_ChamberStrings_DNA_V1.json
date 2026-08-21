@@ -1,13 +1,30 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "name": "Axel Fisch Chamber Strings DNA",
-  "sourceCorpus": { "midiFiles": 11, "canonicalSextets": 7, "totalNotes": 24411, "durationMinutes": 54.15 },
+  "sourceCorpus": {
+    "midiFiles": 11,
+    "canonicalSextets": 7,
+    "totalNotes": 24411,
+    "durationMinutes": 54.15,
+    "musicXmlScores": [
+      "AFRI-CAN-REUNION-28-05-2021",
+      "Flying-Circus",
+      "On her way home",
+      "3 anges pour une fretless"
+    ]
+  },
   "ensemble": {
     "voiceCount": 6,
-    "targetVerticalSpanSemitones": 32,
+    "targetVerticalSpanSemitones": 35,
+    "spanCorridorSemitones": { "min": 27, "max": 43 },
     "targetAdjacentGapSemitones": { "median": 5, "preferredMin": 3, "preferredMax": 8 },
     "voiceCrossing": { "defaultTarget": 0.04, "softMaximum": 0.08 },
-    "parallelPerfectPolicy": { "mode": "penalize_not_forbid", "defaultSoftMaximumRate": 0.02 }
+    "parallelPerfectPolicy": { "mode": "penalize_not_forbid", "defaultSoftMaximumRate": 0.02 },
+    "unisonPolicy": {
+      "violin1Violin2": "allowed_frequent",
+      "celloBassOctave": "allowed_frequent",
+      "note": "Corpus median Vln1–Vln2 gap includes unison; Cello–Bass often at octave."
+    }
   },
   "voiceRoles": [
     { "id": "crown", "voice": "Violin1", "centralRangeMidi": [67, 81], "smallMotionTarget": 0.80, "largeLeapBudget": 0.18 },
@@ -21,5 +38,17 @@
     "intervalClassWeights": [0.166, 0.039, 0.151, 0.205, 0.152, 0.262, 0.025],
     "bassRelativeWeights": [0.350, 0.009, 0.071, 0.080, 0.080, 0.068, 0.018, 0.129, 0.031, 0.070, 0.066, 0.029]
   },
-  "bassLanguage": { "motionWithinTwoSemitones": 0.32, "motionWithinFiveSemitones": 0.62, "leapAtLeastSevenSemitones": 0.34 }
+  "bassLanguage": {
+    "motionWithinTwoSemitones": 0.32,
+    "motionWithinFiveSemitones": 0.62,
+    "leapAtLeastSevenSemitones": 0.34,
+    "approachTones": [0, 3, 4, 7, 10, 11, 2],
+    "note": "Root is the house; 3/5/7/9 approach the next chord when musically useful."
+  },
+  "textures": {
+    "pad-legato": { "source": "Afri-Can Reunion, Pour-toi-ma-belle", "innerChoir": "sustained triad" },
+    "pizz-groove": { "source": "Flying Circus", "innerChoir": "short ostinato" },
+    "marcato-hits": { "source": "cadences / turnarounds", "innerChoir": "aligned attacks" },
+    "unison-octave": { "source": "pluie de notes climaxes", "innerChoir": "Vln1=Vln2; Cello≈Bass+12" }
+  }
 }

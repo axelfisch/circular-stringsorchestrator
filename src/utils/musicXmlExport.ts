@@ -24,11 +24,11 @@ const PITCH_NAMES = [
 
 function escapeXml(value: string): string {
   return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
+    .replace(/'/g, ''');
 }
 
 function pitchFromMidi(midiNote: number) {
@@ -103,8 +103,12 @@ function notesForMeasure(
   }).join('');
 }
 
-export function generateMusicXml(measures: SequenceMeasure[], tempo: number): string {
-  const notes = buildMidiExportNotes(measures);
+export function generateMusicXml(
+  measures: SequenceMeasure[],
+  tempo: number,
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): string {
+  const notes = buildMidiExportNotes(measures, texture);
   const playbackEvents = buildPlaybackEvents(measures);
   const partList = PARTS.map((part) => `<score-part id="${part.id}"><part-name>${part.name}</part-name></score-part>`).join('');
   const parts = PARTS.map((part, partIndex) => {
@@ -127,8 +131,12 @@ export function generateMusicXml(measures: SequenceMeasure[], tempo: number): st
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">\n<score-partwise version="4.0"><work><work-title>AiXEL StringsOrchestrator</work-title></work><identification><creator type="composer">Axel Fisch</creator><encoding><software>AiXEL StringsOrchestrator</software></encoding></identification><part-list>${partList}</part-list>${parts}</score-partwise>`;
 }
 
-export function downloadMusicXmlFile(measures: SequenceMeasure[], tempo: number): void {
-  const xml = generateMusicXml(measures, tempo);
+export function downloadMusicXmlFile(
+  measures: SequenceMeasure[],
+  tempo: number,
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): void {
+  const xml = generateMusicXml(measures, tempo, texture);
   const blob = new Blob([xml], { type: 'application/vnd.recordare.musicxml+xml' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

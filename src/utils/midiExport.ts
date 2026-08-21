@@ -86,30 +86,61 @@ function createTrack(events: MidiEvent[], endTick: number): number[] {
   return [0x4d, 0x54, 0x72, 0x6b, ...uint32(trackData.length), ...trackData];
 }
 
-export function buildMidiExportNotes(measures: SequenceMeasure[]): MidiExportNote[] {
+export function buildMidiExportNotes(
+  measures: SequenceMeasure[],
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): MidiExportNote[] {
   const engine = new StringsEngine();
+  const events = buildPlaybackEvents(measures);
 
-  return buildPlaybackEvents(measures).flatMap((event) => {
-    const symbol = chordSymbol(event.chord);
-    const chordNotes = chordToMidiNotes(
+  const sequenceInput = events.map((event) => ({
+    midiNotes: chordToMidiNotes(
       event.chord.key,
       event.chord.extension,
       event.chord.bassInversion,
       event.chord.isForeignBass
-    );
-    const orchestration = engine.orchestrateChord(chordNotes, symbol);
+    ),
+    chordSymbol: chordSymbol(event.chord)
+  }));
 
-    return orchestration.voices.map((voice) => ({
-      voice: voice.voice,
-      midiNote: voice.midiNote,
-      startTick: event.startBeat * MIDI_TICKS_PER_BEAT,
-      durationTicks: event.durationBeats * MIDI_TICKS_PER_BEAT,
-      chordSymbol: symbol
-    }));
+  // Role Director: bass approach N→N+1 across the full sequence
+  const orchestrations = engine.orchestrateSequence(sequenceInput, { texture });
+
+  return events.flatMap((event, index) => {
+    const orchestration = orchestrations[index];
+    const symbol = chordSymbol(event.chord);
+
+    return orchestration.voices.map((voice) => {
+      // Texture-aware written durations (pizz/marcato shorter than full slot)
+      let durationTicks = event.durationBeats * MIDI_TICKS_PER_BEAT;
+      if (texture === 'pizz-groove') {
+        durationTicks = Math.max(
+          Math.round(MIDI_TICKS_PER_BEAT * 0.25),
+          Math.round(durationTicks * (voice.role === 'melody' ? 0.45 : 0.2))
+        );
+      } else if (texture === 'marcato-hits') {
+        durationTicks = Math.max(
+          Math.round(MIDI_TICKS_PER_BEAT * 0.2),
+          Math.round(durationTicks * 0.25)
+        );
+      }
+
+      return {
+        voice: voice.voice,
+        midiNote: voice.midiNote,
+        startTick: event.startBeat * MIDI_TICKS_PER_BEAT,
+        durationTicks,
+        chordSymbol: symbol
+      };
+    });
   });
 }
 
-export function generateMidiFile(measures: SequenceMeasure[], tempo: number): Uint8Array {
+export function generateMidiFile(
+  measures: SequenceMeasure[],
+  tempo: number,
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): Uint8Array {
   const endTick = measures.length * 4 * MIDI_TICKS_PER_BEAT;
   const microsecondsPerBeat = Math.round(60_000_000 / tempo);
   const conductorEvents: MidiEvent[] = [
@@ -126,7 +157,7 @@ export function generateMidiFile(measures: SequenceMeasure[], tempo: number): Ui
     });
   });
 
-  const notes = buildMidiExportNotes(measures);
+  const notes = buildMidiExportNotes(measures, texture);
   const tracks = [createTrack(conductorEvents, endTick)];
 
   VOICE_ORDER.forEach((voice, voiceIndex) => {
@@ -157,8 +188,12 @@ export function generateMidiFile(measures: SequenceMeasure[], tempo: number): Ui
   return new Uint8Array([...header, ...tracks.flat()]);
 }
 
-export function downloadMidiFile(measures: SequenceMeasure[], tempo: number): void {
-  const bytes = generateMidiFile(measures, tempo);
+export function downloadMidiFile(
+  measures: SequenceMeasure[],
+  tempo: number,
+  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
+): void {
+  const bytes = generateMidiFile(measures, tempo, texture);
   const blob = new Blob([bytes], { type: 'audio/midi' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
