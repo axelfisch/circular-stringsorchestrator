@@ -5,19 +5,31 @@ import { downloadMidiFile } from '../utils/midiExport';
 import { downloadMusicXmlFile } from '../utils/musicXmlExport';
 import { downloadPdfFile } from '../utils/pdfExport';
 import { countSequenceChords, SequenceMeasure } from '../utils/sequencerModel';
+import type { TextureMode } from '../utils/stringsengine_v2';
 
 interface ChordSequencerProps {
   timeSignature: string;
   measures: SequenceMeasure[];
   selectedStyle: string;
   tempo: number;
+  texture?: TextureMode;
   onTempoChange: (tempo: number) => void;
   onRemoveChord: (id: string) => void;
   onClearSequence: () => void;
   onToggleMeasure: (measureIndex: number) => void;
 }
 
-export default function ChordSequencer({ timeSignature, measures, selectedStyle, tempo, onTempoChange, onRemoveChord, onClearSequence, onToggleMeasure }: ChordSequencerProps) {
+export default function ChordSequencer({
+  timeSignature,
+  measures,
+  selectedStyle,
+  tempo,
+  texture = 'pad-legato',
+  onTempoChange,
+  onRemoveChord,
+  onClearSequence,
+  onToggleMeasure
+}: ChordSequencerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [loopEnabled, setLoopEnabled] = useState(false);
   const [currentBar, setCurrentBar] = useState<number>(-1);
@@ -110,17 +122,17 @@ export default function ChordSequencer({ timeSignature, measures, selectedStyle,
 
   const handleMidiExport = () => {
     if (chordCount === 0) return;
-    downloadMidiFile(measures, tempo);
+    downloadMidiFile(measures, tempo, texture);
   };
 
   const handleMusicXmlExport = () => {
     if (chordCount === 0) return;
-    downloadMusicXmlFile(measures, tempo);
+    downloadMusicXmlFile(measures, tempo, texture);
   };
 
   const handlePdfExport = () => {
     if (chordCount === 0) return;
-    downloadPdfFile(measures, tempo, selectedStyle);
+    downloadPdfFile(measures, tempo, selectedStyle, texture);
   };
   return (
     <div className="space-y-4 w-full">
