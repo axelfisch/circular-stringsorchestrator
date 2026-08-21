@@ -86,53 +86,27 @@ function createTrack(events: MidiEvent[], endTick: number): number[] {
   return [0x4d, 0x54, 0x72, 0x6b, ...uint32(trackData.length), ...trackData];
 }
 
-export function buildMidiExportNotes(
-  measures: SequenceMeasure[],
-  texture: 'pad-legato' | 'pizz-groove' | 'marcato-hits' | 'unison-octave' = 'pad-legato'
-): MidiExportNote[] {
+export function buildMidiExportNotes(measures: SequenceMeasure[]): MidiExportNote[] {
   const engine = new StringsEngine();
-  const events = buildPlaybackEvents(measures);
 
-  const sequenceInput = events.map((event) => ({
-    midiNotes: chordToMidiNotes(
+  return buildPlaybackEvents(measures).flatMap((event) => {
+    const symbol = chordSymbol(event.chord);
+    const chordNotes = chordToMidiNotes(
       event.chord.key,
       event.chord.extension,
       event.chord.bassInversion,
       event.chord.isForeignBass
-    ),
-    chordSymbol: chordSymbol(event.chord)
-  }));
+    );
+    // Uses Role Director when StringsEngine.orchestrateChord accepts options / nextChord
+    const orchestration = engine.orchestrateChord(chordNotes, symbol);
 
-  // Role Director: bass approach N→N+1 across the full sequence
-  const orchestrations = engine.orchestrateSequence(sequenceInput, { texture });
-
-  return events.flatMap((event, index) => {
-    const orchestration = orchestrations[index];
-    const symbol = chordSymbol(event.chord);
-
-    return orchestration.voices.map((voice) => {
-      // Texture-aware written durations (pizz/marcato shorter than full slot)
-      let durationTicks = event.durationBeats * MIDI_TICKS_PER_BEAT;
-      if (texture === 'pizz-groove') {
-        durationTicks = Math.max(
-          Math.round(MIDI_TICKS_PER_BEAT * 0.25),
-          Math.round(durationTicks * (voice.role === 'melody' ? 0.45 : 0.2))
-        );
-      } else if (texture === 'marcato-hits') {
-        durationTicks = Math.max(
-          Math.round(MIDI_TICKS_PER_BEAT * 0.2),
-          Math.round(durationTicks * 0.25)
-        );
-      }
-
-      return {
-        voice: voice.voice,
-        midiNote: voice.midiNote,
-        startTick: event.startBeat * MIDI_TICKS_PER_BEAT,
-        durationTicks,
-        chordSymbol: symbol
-      };
-    });
+    return orchestration.voices.map((voice) => ({
+      voice: voice.voice,
+      midiNote: voice.midiNote,
+      startTick: event.startBeat * MIDI_TICKS_PER_BEAT,
+      durationTicks: event.durationBeats * MIDI_TICKS_PER_BEAT,
+      chordSymbol: symbol
+    }));
   });
 }
 
