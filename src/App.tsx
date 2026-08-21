@@ -11,6 +11,7 @@ import {
   SequenceChord,
   toggleMeasureSplit
 } from './utils/sequencerModel';
+import type { TextureMode } from './utils/stringsengine_v2';
 
 function App() {
   const [selectedKey, setSelectedKey] = useState<string>('C');
@@ -20,6 +21,7 @@ function App() {
   const [selectedStyle, setSelectedStyle] = useState<string>('');
   const [measures, setMeasures] = useState(createEmptyMeasures);
   const [tempo, setTempo] = useState(120);
+  const [texture, setTexture] = useState<TextureMode>('pad-legato');
   const timeSignature = '4/4' as const;
 
   const handleSelectionChange = (key: string, extension: string, bassInversion?: string, isForeign?: boolean) => {
@@ -69,7 +71,7 @@ function App() {
             className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] text-white font-semibold text-xs md:text-sm rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl hover:shadow-green-500/30"
             title="Open AiXEL Music Orchestrator GPT"
           >
-            <Sparkles className="w-3 h-3 md:w-4 md:h-4" />
+            <Sparkles className="w-3 h-3 md:w-4 h-4" />
             AiXEL GPT
           </a>
         </div>
@@ -116,6 +118,8 @@ function App() {
               measures={measures}
               timeSignature={timeSignature}
               tempo={tempo}
+              texture={texture}
+              onTextureChange={setTexture}
               onApplyProposal={setMeasures}
             />
           </div>
@@ -129,6 +133,7 @@ function App() {
           measures={measures}
           selectedStyle={selectedStyle}
           tempo={tempo}
+          texture={texture}
           onTempoChange={setTempo}
           onRemoveChord={handleRemoveChord}
           onClearSequence={handleClearSequence}
